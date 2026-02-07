@@ -9,19 +9,27 @@ import Contact from "@/components/Contact";
 export default function Home() {
   return (
     <>
-      <Hero />
-      <div className="section-divider max-w-4xl mx-auto" />
-      <About />
-      <div className="section-divider max-w-4xl mx-auto" />
-      <Experience />
-      <div className="section-divider max-w-4xl mx-auto" />
-      <Projects />
-      <div className="section-divider max-w-4xl mx-auto" />
-      <Skills />
-      <div className="section-divider max-w-4xl mx-auto" />
-      <Education />
-      <div className="section-divider max-w-4xl mx-auto" />
-      <Contact />
+      <section id="home">
+        <Hero />
+      </section>
+      <section id="about">
+        <About />
+      </section>
+      <section id="experience">
+        <Experience />
+      </section>
+      <section id="projects">
+        <Projects />
+      </section>
+      <section id="skills">
+        <Skills />
+      </section>
+      <section id="education">
+        <Education />
+      </section>
+      <section id="contact">
+        <Contact />
+      </section>
     </>
   );
 }

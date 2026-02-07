@@ -1,224 +1,174 @@
-'use client';
-
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { FiArrowDown, FiGithub, FiLinkedin, FiMail, FiCode, FiCpu, FiDatabase } from 'react-icons/fi';
-import { useEffect, useState } from 'react';
-
-const roles = ['Software Engineer', 'Full Stack Developer', 'AI/ML Enthusiast'];
-
-const floatingIcons = [
-  { icon: FiCode, delay: 0, x: -100, y: -50 },
-  { icon: FiCpu, delay: 0.5, x: 100, y: -80 },
-  { icon: FiDatabase, delay: 1, x: -80, y: 60 },
-  { icon: FiCode, delay: 1.5, x: 120, y: 40 },
-];
+"use client";
+import { motion } from "framer-motion";
+import { Spotlight } from "@/components/ui/spotlight";
+import { EncryptedText } from "@/components/ui/encrypted-text";
+import { FlipWords } from "@/components/ui/flip-words";
+import { MovingBorderButton } from "@/components/ui/moving-border";
+import { useConfig } from "@/components/ConfigProvider";
+import { FiGithub, FiLinkedin, FiMail, FiArrowDown } from "react-icons/fi";
 
 export default function Hero() {
-  const [currentRole, setCurrentRole] = useState(0);
-  const [displayText, setDisplayText] = useState('');
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    const role = roles[currentRole];
-
-    const typeWriter = () => {
-      let i = 0;
-      setDisplayText('');
-
-      const type = () => {
-        if (i < role.length) {
-          setDisplayText(role.slice(0, i + 1));
-          i++;
-          timeout = setTimeout(type, 100);
-        } else {
-          timeout = setTimeout(() => {
-            setCurrentRole((prev) => (prev + 1) % roles.length);
-          }, 2000);
-        }
-      };
-
-      type();
-    };
-
-    typeWriter();
-
-    return () => clearTimeout(timeout);
-  }, [currentRole]);
-
-  const scrollToAbout = () => {
-    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const { flags } = useConfig();
+  const roles = [
+    "Software Engineer",
+    "Full Stack Developer",
+    "AI/ML Enthusiast",
+    "Problem Solver",
+  ];
 
   return (
-    <section
-      id="hero"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden px-4"
-    >
-      {/* Animated background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle, #64ffda 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-        }} />
-      </div>
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Spotlights */}
+      <Spotlight
+        className="-top-40 left-0 md:left-60 md:-top-20"
+        fill="var(--color-primary)"
+      />
+      <Spotlight
+        className="top-10 right-0 md:right-60 md:-top-10"
+        fill="var(--color-secondary)"
+      />
 
-      {/* Floating tech icons */}
-      <div className="absolute inset-0 pointer-events-none hidden md:block">
-        {floatingIcons.map((item, index) => {
-          const Icon = item.icon;
-          return (
-            <motion.div
-              key={index}
-              className="absolute text-teal-400/30"
-              style={{
-                left: '50%',
-                top: '50%',
-                x: item.x,
-                y: item.y,
-              }}
-              animate={{
-                y: item.y + Math.sin(Date.now() / 1000 + index) * 20,
-                rotate: [0, 10, -10, 0],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                delay: item.delay,
-              }}
-            >
-              <Icon size={40} />
-            </motion.div>
-          );
-        })}
-      </div>
+      {/* Dot Grid Background */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, currentColor 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
 
-      <motion.div
-        className="text-center z-10 max-w-4xl mx-auto"
-        style={{ y: y1, opacity }}
-      >
+      {/* Content */}
+      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         {/* Greeting */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-teal-400 text-lg md:text-xl mb-4 font-mono"
+          className="text-sm font-mono tracking-widest uppercase mb-6"
+          style={{ color: "var(--color-primary)" }}
         >
-          Hi, my name is
+          Hello, my name is
         </motion.p>
 
         {/* Name */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold text-cream-100 mb-6"
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-4"
         >
-          Yash Chavda
+          {flags.encryptedName ? (
+            <EncryptedText
+              text="Yash Chavda"
+              interval={40}
+              className="font-sans"
+            />
+          ) : (
+            "Yash Chavda"
+          )}
         </motion.h1>
 
-        {/* Typewriter role */}
+        {/* Role Flipper */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-2xl md:text-4xl lg:text-5xl text-navy-700 mb-8 h-16 font-mono"
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="text-xl md:text-3xl text-neutral-400 font-light mb-8 h-12 flex items-center justify-center"
         >
-          <span className="text-terra-cotta">{displayText}</span>
-          <span className="animate-pulse">|</span>
+          I&apos;m a
+          <FlipWords words={roles} className="text-neutral-200 font-medium" />
         </motion.div>
 
         {/* Tagline */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-lg md:text-xl text-navy-700 max-w-2xl mx-auto mb-12"
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="text-neutral-500 text-lg max-w-xl mx-auto mb-10 leading-relaxed"
         >
-          Building intelligence, one line at a time. Crafting scalable applications
-          with <span className="text-teal-400">Next.js</span>,{' '}
-          <span className="text-teal-400">Python</span>, and{' '}
-          <span className="text-teal-400">AI/ML</span>.
+          Building elegant digital experiences with clean code and creative
+          thinking. Specializing in full-stack development and AI-powered
+          solutions.
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+          transition={{ duration: 0.5, delay: 0.8 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          <motion.button
-            onClick={scrollToAbout}
-            className="magnetic-btn px-8 py-4 border-2 border-teal-400 text-teal-400 rounded-lg font-medium hover:bg-teal-400/10 transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <MovingBorderButton href="#projects">
+            View My Work
+            <FiArrowDown className="w-4 h-4" />
+          </MovingBorderButton>
+          <a
+            href="#contact"
+            className="px-6 py-2.5 text-sm font-medium text-neutral-400 hover:text-white border border-white/[0.08] rounded-full hover:border-white/[0.16] transition-all duration-300"
           >
-            Explore My Work
-          </motion.button>
-          <motion.a
-            href="https://github.com/yashchavda0"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="magnetic-btn px-8 py-4 bg-teal-400 text-navy-900 rounded-lg font-medium hover:bg-teal-300 transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            View GitHub
-          </motion.a>
+            Get In Touch
+          </a>
         </motion.div>
 
-        {/* Quick Links */}
+        {/* Social Links */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="flex items-center justify-center space-x-8"
+          transition={{ duration: 0.5, delay: 1.2 }}
+          className="flex justify-center gap-6 mt-16"
         >
-          <motion.a
-            href="https://github.com/yashchavda0"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-navy-700 hover:text-teal-400 transition-colors"
-            whileHover={{ scale: 1.2, rotate: 5 }}
-          >
-            <FiGithub size={28} />
-          </motion.a>
-          <motion.a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-navy-700 hover:text-teal-400 transition-colors"
-            whileHover={{ scale: 1.2, rotate: 5 }}
-          >
-            <FiLinkedin size={28} />
-          </motion.a>
-          <motion.a
-            href="mailto:yashchavda2004@gmail.com"
-            className="text-navy-700 hover:text-teal-400 transition-colors"
-            whileHover={{ scale: 1.2, rotate: 5 }}
-          >
-            <FiMail size={28} />
-          </motion.a>
+          {[
+            {
+              icon: <FiGithub className="w-5 h-5" />,
+              href: "https://github.com/yashchavda0",
+              label: "GitHub",
+            },
+            {
+              icon: <FiLinkedin className="w-5 h-5" />,
+              href: "https://linkedin.com/in/yashchavda",
+              label: "LinkedIn",
+            },
+            {
+              icon: <FiMail className="w-5 h-5" />,
+              href: "mailto:yashchavda2004@gmail.com",
+              label: "Email",
+            },
+          ].map((social) => (
+            <a
+              key={social.label}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-neutral-600 hover:text-[var(--color-primary)] transition-colors duration-300"
+              aria-label={social.label}
+            >
+              {social.icon}
+            </a>
+          ))}
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Scroll indicator */}
       <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
       >
-        <button
-          onClick={scrollToAbout}
-          className="text-teal-400 hover:text-teal-300 transition-colors"
-          aria-label="Scroll down"
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="w-5 h-8 rounded-full border-2 border-neutral-700 flex items-start justify-center p-1"
         >
-          <FiArrowDown size={32} />
-        </button>
+          <motion.div
+            animate={{ opacity: [0.2, 1, 0.2] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="w-1 h-2 rounded-full"
+            style={{ background: "var(--color-primary)" }}
+          />
+        </motion.div>
       </motion.div>
-    </section>
+    </div>
   );
 }

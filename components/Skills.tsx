@@ -1,160 +1,338 @@
-'use client';
+"use client";
 
-import { motion, useInView } from 'framer-motion';
-import { useRef, useEffect, useState } from 'react';
-import {
-  FaPython, FaJava, FaReact, FaNodeJs, FaDatabase,
-} from 'react-icons/fa';
-import { CgCPlusPlus } from 'react-icons/cg';
-import { SiNextdotjs, SiExpress, SiMysql, SiPostgresql, SiMongodb, SiGraphql, SiNumpy } from 'react-icons/si';
+import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
+import { useRef, useEffect, useState, useCallback } from "react";
+import { useConfig } from "@/components/ConfigProvider";
 
-const skillCategories = [
-  {
-    title: 'Languages',
-    icon: '💻',
-    skills: [
-      { name: 'Python', level: 90, icon: FaPython, color: '#3776AB' },
-      { name: 'Java', level: 85, icon: FaJava, color: '#007396' },
-      { name: 'C++', level: 80, icon: CgCPlusPlus, color: '#00599C' },
-      { name: 'C', level: 75, icon: 'C', color: '#A8B9CC' },
-    ],
-  },
-  {
-    title: 'Frameworks & Libraries',
-    icon: '🚀',
-    skills: [
-      { name: 'React.js', level: 90, icon: FaReact, color: '#61DAFB' },
-      { name: 'Next.js', level: 85, icon: SiNextdotjs, color: '#000000' },
-      { name: 'Node.js', level: 85, icon: FaNodeJs, color: '#339933' },
-      { name: 'Express.js', level: 80, icon: SiExpress, color: '#000000' },
-      { name: 'NumPy', level: 75, icon: SiNumpy, color: '#013243' },
-    ],
-  },
-  {
-    title: 'Databases',
-    icon: '🗄️',
-    skills: [
-      { name: 'PostgreSQL', level: 85, icon: SiPostgresql, color: '#336791' },
-      { name: 'MySQL', level: 80, icon: SiMysql, color: '#4479A1' },
-      { name: 'MongoDB', level: 75, icon: SiMongodb, color: '#47A248' },
-      { name: 'GraphQL', level: 80, icon: SiGraphql, color: '#E10098' },
-    ],
-  },
-  {
-    title: 'Core Concepts',
-    icon: '📚',
-    skills: [
-      { name: 'Data Structures', level: 90, icon: 'DS', color: '#64ffda' },
-      { name: 'Algorithms', level: 85, icon: 'AL', color: '#e07a5f' },
-      { name: 'OOP', level: 90, icon: 'OOP', color: '#64ffda' },
-      { name: 'DBMS', level: 85, icon: 'DB', color: '#e07a5f' },
-    ],
-  },
+/* ─── Skill data ─── */
+interface Skill {
+  name: string;
+  level: number;
+  category: string;
+}
+
+const skills: Skill[] = [
+  // Languages
+  { name: "Python", level: 90, category: "Languages" },
+  { name: "Java", level: 85, category: "Languages" },
+  { name: "C++", level: 80, category: "Languages" },
+  { name: "C", level: 75, category: "Languages" },
+  // Frameworks
+  { name: "React", level: 90, category: "Frameworks" },
+  { name: "Next.js", level: 85, category: "Frameworks" },
+  { name: "Node.js", level: 85, category: "Frameworks" },
+  { name: "Express", level: 80, category: "Frameworks" },
+  { name: "NumPy", level: 75, category: "Frameworks" },
+  // Databases
+  { name: "PostgreSQL", level: 85, category: "Databases" },
+  { name: "MySQL", level: 80, category: "Databases" },
+  { name: "MongoDB", level: 75, category: "Databases" },
+  { name: "GraphQL", level: 80, category: "Databases" },
+  // Core
+  { name: "DSA", level: 90, category: "Core" },
+  { name: "Algorithms", level: 85, category: "Core" },
+  { name: "OOP", level: 90, category: "Core" },
+  { name: "DBMS", level: 85, category: "Core" },
 ];
 
-function SkillBar({ skill, index }: { skill: typeof skillCategories[0]['skills'][0]; index: number }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const [width, setWidth] = useState(0);
+const categories = ["All", "Languages", "Frameworks", "Databases", "Core"];
+
+const categoryColors: Record<string, string> = {
+  Languages: "var(--color-primary)",
+  Frameworks: "var(--color-secondary)",
+  Databases: "var(--color-primary)",
+  Core: "var(--color-secondary)",
+};
+
+/* ─── Generate constellation positions in a circular layout ─── */
+function generatePositions(count: number, width: number, height: number) {
+  const positions: { x: number; y: number }[] = [];
+  const cx = width / 2;
+  const cy = height / 2;
+  const maxRadius = Math.min(width, height) * 0.4;
+
+  for (let i = 0; i < count; i++) {
+    const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+    const radiusJitter = maxRadius * (0.7 + Math.random() * 0.3);
+    positions.push({
+      x: cx + Math.cos(angle) * radiusJitter,
+      y: cy + Math.sin(angle) * radiusJitter,
+    });
+  }
+  return positions;
+}
+
+/* ─── Constellation (SVG interactive) ─── */
+function Constellation({
+  filteredSkills,
+}: {
+  filteredSkills: Skill[];
+}) {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [size, setSize] = useState({ w: 700, h: 500 });
+  const [hovered, setHovered] = useState<number | null>(null);
+  const mouseX = useMotionValue(size.w / 2);
+  const mouseY = useMotionValue(size.h / 2);
+  const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
+  const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
 
   useEffect(() => {
-    if (isInView) {
-      setTimeout(() => setWidth(skill.level), index * 100);
-    }
-  }, [isInView, index, skill.level]);
+    const updateSize = () => {
+      if (svgRef.current) {
+        const rect = svgRef.current.getBoundingClientRect();
+        setSize({ w: rect.width, h: Math.max(rect.height, 450) });
+      }
+    };
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
 
-  const Icon = typeof skill.icon === 'string' ? null : skill.icon;
+  const positions = generatePositions(filteredSkills.length, size.w, size.h);
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<SVGSVGElement>) => {
+      const rect = svgRef.current?.getBoundingClientRect();
+      if (rect) {
+        mouseX.set(e.clientX - rect.left);
+        mouseY.set(e.clientY - rect.top);
+      }
+    },
+    [mouseX, mouseY]
+  );
+
+  /* Build connection lines — connect each node to its 2 nearest neighbours */
+  const lines: { x1: number; y1: number; x2: number; y2: number }[] = [];
+  positions.forEach((p, i) => {
+    const dists = positions
+      .map((q, j) => ({
+        j,
+        d: Math.hypot(p.x - q.x, p.y - q.y),
+      }))
+      .filter((d) => d.j !== i)
+      .sort((a, b) => a.d - b.d);
+    dists.slice(0, 2).forEach((d) => {
+      const key1 = `${Math.min(i, d.j)}-${Math.max(i, d.j)}`;
+      if (!lines.find((l) => `${positions.indexOf({ x: l.x1, y: l.y1 })}-${positions.indexOf({ x: l.x2, y: l.y2 })}` === key1)) {
+        lines.push({ x1: p.x, y1: p.y, x2: positions[d.j].x, y2: positions[d.j].y });
+      }
+    });
+  });
 
   return (
-    <div ref={ref} className="mb-4">
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center space-x-2">
-          {Icon ? (
-            <Icon size={18} style={{ color: skill.color }} />
-          ) : (
-            <span className="text-xs font-mono font-bold" style={{ color: skill.color }}>{typeof skill.icon === 'string' ? skill.icon : ''}</span>
-          )}
-          <span className="text-cream-100 text-sm">{skill.name}</span>
-        </div>
-        <span className="text-teal-400 text-sm font-mono">{skill.level}%</span>
-      </div>
-      <div className="h-2 bg-navy-900 rounded-full overflow-hidden">
-        <motion.div
-          className="h-full rounded-full"
-          style={{ backgroundColor: skill.color }}
-          initial={{ width: 0 }}
-          animate={{ width: isInView ? `${skill.level}%` : 0 }}
-          transition={{ duration: 1, delay: index * 0.1, ease: 'easeOut' }}
+    <svg
+      ref={svgRef}
+      className="w-full h-[450px] md:h-[500px]"
+      onMouseMove={handleMouseMove}
+    >
+      {/* Connection lines */}
+      {lines.map((l, i) => (
+        <motion.line
+          key={`line-${i}`}
+          x1={l.x1}
+          y1={l.y1}
+          x2={l.x2}
+          y2={l.y2}
+          stroke="var(--color-primary)"
+          strokeOpacity={0.1}
+          strokeWidth={1}
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 1.5, delay: i * 0.02 }}
         />
-      </div>
+      ))}
+
+      {/* Skill nodes */}
+      {filteredSkills.map((skill, i) => {
+        const pos = positions[i];
+        if (!pos) return null;
+        const radius = 6 + (skill.level / 100) * 14;
+        const isHovered = hovered === i;
+        const color = categoryColors[skill.category] || "var(--color-primary)";
+
+        return (
+          <g
+            key={skill.name}
+            onMouseEnter={() => setHovered(i)}
+            onMouseLeave={() => setHovered(null)}
+            style={{ cursor: "pointer" }}
+          >
+            {/* Glow */}
+            <motion.circle
+              cx={pos.x}
+              cy={pos.y}
+              r={radius + 8}
+              fill={color}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isHovered ? 0.15 : 0 }}
+              transition={{ duration: 0.2 }}
+            />
+            {/* Main node */}
+            <motion.circle
+              cx={pos.x}
+              cy={pos.y}
+              r={radius}
+              fill={color}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{
+                scale: isHovered ? 1.3 : 1,
+                opacity: isHovered ? 1 : 0.7,
+              }}
+              transition={{
+                scale: { type: "spring", stiffness: 300 },
+                opacity: { duration: 0.3 },
+                default: { duration: 0.6, delay: i * 0.04 },
+              }}
+            />
+            {/* Label */}
+            <motion.text
+              x={pos.x}
+              y={pos.y + radius + 16}
+              textAnchor="middle"
+              fill="currentColor"
+              className="text-[10px] md:text-xs fill-neutral-400"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isHovered ? 1 : 0.5 }}
+            >
+              {skill.name}
+            </motion.text>
+            {/* Level badge on hover */}
+            {isHovered && (
+              <motion.text
+                x={pos.x}
+                y={pos.y + 4}
+                textAnchor="middle"
+                fill="white"
+                className="text-[10px] font-bold"
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                {skill.level}%
+              </motion.text>
+            )}
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+/* ─── Grid fallback ─── */
+function SkillGrid({ filteredSkills }: { filteredSkills: Skill[] }) {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      {filteredSkills.map((skill, i) => (
+        <motion.div
+          key={skill.name}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: i * 0.03 }}
+          className="relative overflow-hidden rounded-xl border border-white/5 bg-white/[0.02] p-4 group hover:border-white/10 transition-colors"
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm text-neutral-200 font-medium">
+              {skill.name}
+            </span>
+            <span
+              className="text-xs font-mono"
+              style={{ color: categoryColors[skill.category] }}
+            >
+              {skill.level}%
+            </span>
+          </div>
+          {/* Progress bar */}
+          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full rounded-full"
+              style={{ backgroundColor: categoryColors[skill.category] }}
+              initial={{ width: 0 }}
+              whileInView={{ width: `${skill.level}%` }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: i * 0.05 }}
+            />
+          </div>
+          <span className="text-[10px] text-neutral-500 mt-1 block">
+            {skill.category}
+          </span>
+        </motion.div>
+      ))}
     </div>
   );
 }
 
+/* ─── Main component ─── */
 export default function Skills() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const [activeCategory, setActiveCategory] = useState("All");
+  const { flags } = useConfig();
+
+  const filteredSkills =
+    activeCategory === "All"
+      ? skills
+      : skills.filter((s) => s.category === activeCategory);
 
   return (
-    <section id="skills" className="py-24 px-4 bg-navy-950" ref={ref}>
-      <div className="max-w-6xl mx-auto">
-        {/* Section Title */}
+    <div className="py-24 px-4" ref={sectionRef}>
+      <div className="max-w-5xl mx-auto">
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-cream-100 mb-4">
-            Technical <span className="text-teal-400">Arsenal</span>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            Technical{" "}
+            <span style={{ color: "var(--color-primary)" }}>Arsenal</span>
           </h2>
-          <div className="w-20 h-1 bg-teal-400 mx-auto rounded-full" />
-          <p className="mt-6 text-navy-700 max-w-2xl mx-auto">
-            Technologies and tools I use to bring ideas to life.
+          <p className="text-neutral-500 max-w-md mx-auto">
+            Technologies and tools I use to bring ideas to life
           </p>
         </motion.div>
 
-        {/* Skills Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {skillCategories.map((category, catIndex) => (
-            <motion.div
-              key={category.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: catIndex * 0.1 }}
-              className="bg-navy-800 rounded-2xl p-6 border-2 border-navy-700 hover:border-teal-400/50 transition-all duration-300"
+        {/* Category filter pills */}
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
+          {categories.map((cat) => (
+            <motion.button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-4 py-1.5 rounded-full text-sm transition-all border ${
+                activeCategory === cat
+                  ? "border-white/20 bg-white/10 text-white"
+                  : "border-white/5 text-neutral-500 hover:text-neutral-300 hover:border-white/10"
+              }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {/* Category Header */}
-              <div className="flex items-center space-x-3 mb-6">
-                <span className="text-3xl">{category.icon}</span>
-                <h3 className="text-lg font-bold text-cream-100">{category.title}</h3>
-              </div>
-
-              {/* Skill Bars */}
-              {category.skills.map((skill, skillIndex) => (
-                <SkillBar key={skill.name} skill={skill} index={skillIndex} />
-              ))}
-            </motion.div>
+              {cat}
+            </motion.button>
           ))}
         </div>
 
-        {/* Additional Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+        {/* Constellation or Grid */}
+        {flags.skillConstellation ? (
+          <Constellation filteredSkills={filteredSkills} />
+        ) : (
+          <SkillGrid filteredSkills={filteredSkills} />
+        )}
+
+        {/* Footer note */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-12 text-center"
+          className="text-center text-neutral-600 text-sm mt-8"
         >
-          <p className="text-navy-700">
-            Always learning and expanding my skill set. Currently exploring{' '}
-            <span className="text-teal-400">Machine Learning</span> and{' '}
-            <span className="text-terra-cotta">Data Science</span>.
-          </p>
-        </motion.div>
+          Currently exploring{" "}
+          <span style={{ color: "var(--color-primary)" }}>
+            Machine Learning
+          </span>{" "}
+          &{" "}
+          <span style={{ color: "var(--color-secondary)" }}>Data Science</span>
+        </motion.p>
       </div>
-    </section>
+    </div>
   );
 }

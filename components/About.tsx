@@ -1,177 +1,207 @@
-'use client';
+"use client";
 
-import { motion, useInView } from 'framer-motion';
-import { useRef, useEffect, useState } from 'react';
-import { FiCode, FiBriefcase, FiMapPin } from 'react-icons/fi';
-import { FaTrophy } from 'react-icons/fa';
+import { motion, useInView } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
+import {
+  FiCode,
+  FiBriefcase,
+  FiMapPin,
+  FiZap,
+  FiHeart,
+} from "react-icons/fi";
+import { FaTrophy } from "react-icons/fa";
+import {
+  SiReact,
+  SiNextdotjs,
+  SiPython,
+  SiTypescript,
+  SiPostgresql,
+  SiNodedotjs,
+  SiTailwindcss,
+  SiDocker,
+} from "react-icons/si";
 
-const stats = [
-  { icon: FiCode, value: 10, label: 'Projects Built', suffix: '+' },
-  { icon: FiBriefcase, value: 2, label: 'Years Experience', suffix: '+' },
-  { icon: FaTrophy, value: 1, label: 'Hackathon Won', suffix: '' },
+const techItems = [
+  { name: "React", icon: <SiReact /> },
+  { name: "Next.js", icon: <SiNextdotjs /> },
+  { name: "Python", icon: <SiPython /> },
+  { name: "TypeScript", icon: <SiTypescript /> },
+  { name: "PostgreSQL", icon: <SiPostgresql /> },
+  { name: "Node.js", icon: <SiNodedotjs /> },
+  { name: "Tailwind", icon: <SiTailwindcss /> },
+  { name: "Docker", icon: <SiDocker /> },
 ];
 
-export default function About() {
+function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const [counters, setCounters] = useState({ projects: 0, experience: 0, awards: 0 });
+  const isInView = useInView(ref, { once: true });
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (isInView) {
-      const duration = 2000;
-      const steps = 60;
-      const stepDuration = duration / steps;
-
-      stats.forEach((stat, index) => {
-        const target = stat.value;
-        const stepValue = target / steps;
-        let current = 0;
-
-        const timer = setInterval(() => {
-          current += stepValue;
-          if (current >= target) {
-            current = target;
-            clearInterval(timer);
-          }
-
-          setCounters((prev) => {
-            const newCounters = { ...prev };
-            if (index === 0) newCounters.projects = Math.floor(current);
-            if (index === 1) newCounters.experience = Math.floor(current);
-            if (index === 2) newCounters.awards = Math.floor(current);
-            return newCounters;
-          });
-        }, stepDuration);
-      });
-    }
-  }, [isInView]);
+    if (!isInView) return;
+    let current = 0;
+    const step = target / 40;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) {
+        current = target;
+        clearInterval(timer);
+      }
+      setCount(Math.floor(current));
+    }, 50);
+    return () => clearInterval(timer);
+  }, [isInView, target]);
 
   return (
-    <section id="about" className="py-24 px-4" ref={ref}>
-      <div className="max-w-6xl mx-auto">
+    <span ref={ref} className="tabular-nums">
+      {count}
+      {suffix}
+    </span>
+  );
+}
+
+export default function About() {
+  return (
+    <div className="py-24 px-4">
+      <div className="max-w-5xl mx-auto">
         {/* Section Title */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-cream-100 mb-4">
-            About <span className="text-teal-400">Me</span>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            About{" "}
+            <span style={{ color: "var(--color-primary)" }}>Me</span>
           </h2>
-          <div className="w-20 h-1 bg-teal-400 mx-auto rounded-full" />
+          <div
+            className="w-16 h-0.5 mx-auto rounded-full"
+            style={{ background: "var(--color-primary)" }}
+          />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Profile Card with Initials */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="flex justify-center"
-          >
-            <div className="relative">
-              {/* Animated border */}
-              <motion.div
-                className="absolute inset-0 rounded-2xl"
-                animate={{
-                  boxShadow: [
-                    '0 0 20px rgba(100, 255, 218, 0.3)',
-                    '0 0 40px rgba(100, 255, 218, 0.5)',
-                    '0 0 20px rgba(100, 255, 218, 0.3)',
-                  ],
-                }}
-                transition={{ duration: 3, repeat: Infinity }}
+        <BentoGrid className="md:auto-rows-[14rem]">
+          {/* Bio — large card */}
+          <BentoGridItem
+            className="md:col-span-2"
+            title="The Person Behind the Code"
+            description={
+              <TextGenerateEffect
+                words="I'm an aspiring software engineer with hands-on experience in full-stack development. I thrive on building elegant, scalable applications and exploring the intersections of AI and modern web technologies. Currently expanding my expertise in Data Science and Machine Learning."
+                className="text-sm font-normal text-neutral-400"
+                duration={0.3}
               />
-              <div className="relative bg-navy-800 rounded-2xl p-8 border-2 border-teal-400/30">
-                {/* YC Initials */}
-                <div className="w-48 h-48 md:w-64 md:h-64 bg-gradient-to-br from-navy-700 to-navy-900 rounded-xl flex items-center justify-center relative overflow-hidden">
-                  {/* Animated pattern background */}
-                  <div className="absolute inset-0 opacity-20">
-                    <div className="absolute inset-0" style={{
-                      backgroundImage: `linear-gradient(45deg, #64ffda 25%, transparent 25%, transparent 75%, #64ffda 75%, #64ffda), linear-gradient(45deg, #64ffda 25%, transparent 25%, transparent 75%, #64ffda 75%, #64ffda)`,
-                      backgroundSize: '20px 20px',
-                      backgroundPosition: '0 0, 10px 10px',
-                    }} />
-                  </div>
-                  {/* Initials */}
-                  <span className="relative text-6xl md:text-8xl font-bold text-teal-400 font-mono">
-                    YC
+            }
+            icon={<FiCode className="w-4 h-4" style={{ color: "var(--color-primary)" }} />}
+          />
+
+          {/* Stats card */}
+          <BentoGridItem
+            title="By the Numbers"
+            description={
+              <div className="flex flex-col gap-3 mt-2">
+                <div className="flex items-center gap-3">
+                  <FiCode className="w-4 h-4 text-neutral-500" />
+                  <span className="text-2xl font-bold text-white">
+                    <CountUp target={10} suffix="+" />
                   </span>
+                  <span className="text-xs text-neutral-500">Projects</span>
                 </div>
-                {/* Location Badge */}
-                <div className="mt-6 flex items-center justify-center text-navy-700">
-                  <FiMapPin className="mr-2 text-teal-400" />
-                  <span>Ahmedabad, India</span>
+                <div className="flex items-center gap-3">
+                  <FiBriefcase className="w-4 h-4 text-neutral-500" />
+                  <span className="text-2xl font-bold text-white">
+                    <CountUp target={2} suffix="+" />
+                  </span>
+                  <span className="text-xs text-neutral-500">Years Exp</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaTrophy className="w-4 h-4 text-neutral-500" />
+                  <span className="text-2xl font-bold text-white">
+                    <CountUp target={1} />
+                  </span>
+                  <span className="text-xs text-neutral-500">Hackathon Won</span>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            }
+          />
 
-          {/* About Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <h3 className="text-2xl md:text-3xl font-bold text-cream-100 mb-6">
-              The Person Behind <span className="text-teal-400">the Code</span>
-            </h3>
-            <p className="text-navy-700 text-lg leading-relaxed mb-6">
-              I'm an aspiring software engineer with practical experience in full-stack development,
-              well-versed in software development life cycles. I contributed to creating a student portal
-              featuring a user-friendly dashboard and dynamic database integration.
-            </p>
-            <p className="text-navy-700 text-lg leading-relaxed mb-8">
-              Currently expanding my skill set in <span className="text-teal-400">Data Science</span> and{' '}
-              <span className="text-terra-cotta">Machine Learning</span>, aiming to apply programming
-              expertise to develop reliable and scalable applications that make a difference.
-            </p>
+          {/* Location card */}
+          <BentoGridItem
+            title="Based In"
+            description={
+              <div className="flex items-center gap-2 mt-2">
+                <FiMapPin style={{ color: "var(--color-secondary)" }} />
+                <span className="text-neutral-300">Ahmedabad, India</span>
+              </div>
+            }
+            header={
+              <div className="flex-1 rounded-lg bg-gradient-to-br from-white/[0.02] to-white/[0.05] flex items-center justify-center text-4xl">
+                🇮🇳
+              </div>
+            }
+          />
 
-            {/* Quote */}
-            <div className="relative pl-6 border-l-4 border-teal-400 py-4">
-              <p className="text-cream-100 text-lg italic font-mono">
-                &quot;Code is poetry, and every line is a verse in the story of innovation.&quot;
-              </p>
-            </div>
-          </motion.div>
+          {/* Currently card */}
+          <BentoGridItem
+            title="Currently"
+            description={
+              <div className="mt-2">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="relative flex h-2 w-2">
+                    <span
+                      className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                      style={{ background: "var(--color-secondary)" }}
+                    />
+                    <span
+                      className="relative inline-flex rounded-full h-2 w-2"
+                      style={{ background: "var(--color-secondary)" }}
+                    />
+                  </span>
+                  <span className="text-xs text-neutral-400">Open to opportunities</span>
+                </div>
+                <p className="text-neutral-300 text-sm">
+                  Building at <span className="font-medium text-white">Silver Touch Technologies</span>
+                </p>
+              </div>
+            }
+            icon={<FiZap className="w-4 h-4" style={{ color: "var(--color-secondary)" }} />}
+          />
+
+          {/* Fun / Interests card */}
+          <BentoGridItem
+            title="When I'm Not Coding"
+            description={
+              <div className="flex flex-wrap gap-2 mt-2">
+                {["Problem Solving", "Chess", "Tech Blogs", "Open Source"].map(
+                  (item) => (
+                    <span
+                      key={item}
+                      className="px-2.5 py-1 text-xs rounded-full bg-white/[0.05] border border-white/[0.08] text-neutral-400"
+                    >
+                      {item}
+                    </span>
+                  )
+                )}
+              </div>
+            }
+            icon={<FiHeart className="w-4 h-4" style={{ color: "var(--color-primary)" }} />}
+          />
+        </BentoGrid>
+
+        {/* Tech Marquee */}
+        <div className="mt-12">
+          <InfiniteMovingCards
+            items={techItems}
+            direction="left"
+            speed="normal"
+            className="mx-auto"
+          />
         </div>
-
-        {/* Stats Cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="grid grid-cols-3 gap-6 mt-16"
-        >
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            const value = index === 0 ? counters.projects : index === 1 ? counters.experience : counters.awards;
-            return (
-              <motion.div
-                key={stat.label}
-                className="bg-navy-800 rounded-xl p-6 text-center border border-navy-700 hover:border-teal-400/50 transition-colors"
-                whileHover={{ y: -5 }}
-              >
-                <div className="flex justify-center mb-4">
-                  <div className="w-12 h-12 bg-teal-400/10 rounded-full flex items-center justify-center">
-                    <Icon className="text-teal-400" size={24} />
-                  </div>
-                </div>
-                <div className="text-3xl md:text-4xl font-bold text-cream-100 mb-2">
-                  {value}
-                  {stat.suffix}
-                </div>
-                <div className="text-sm text-navy-700">{stat.label}</div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
       </div>
-    </section>
+    </div>
   );
 }

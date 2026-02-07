@@ -1,203 +1,249 @@
-'use client';
+"use client";
 
-import { motion, useInView } from 'framer-motion';
-import { useRef, useState } from 'react';
-import { FiBriefcase, FiArrowRight, FiExternalLink } from 'react-icons/fi';
-import { FaReact, FaNodeJs, FaPython, FaDatabase } from 'react-icons/fa';
-import { SiNextdotjs, SiPostgresql, SiGraphql, SiFastapi } from 'react-icons/si';
+import { motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
+import { TracingBeam } from "@/components/ui/tracing-beam";
+import { GlowingBorder } from "@/components/ui/glowing-effect";
+import { FiChevronDown } from "react-icons/fi";
 
 const experiences = [
   {
-    title: 'Trainee Software Engineer',
-    company: 'Silver Touch Technologies Ltd.',
-    location: 'Ahmedabad',
-    period: 'Present',
-    description: 'Building B2B solutions with cutting-edge tech stack.',
-    highlights: [
-      { text: 'Tabular Accuracy', value: '99%', icon: 'target' },
-      { text: 'Query Performance', value: '+40%', icon: 'zap' },
-      { text: 'Core Optimization', value: '15-20%', icon: 'trending-up' },
+    title: "Trainee Software Engineer",
+    company: "Silver Touch Technologies Ltd.",
+    location: "Ahmedabad",
+    period: "Present",
+    description: "Building B2B solutions with cutting-edge tech stack.",
+    metrics: [
+      { label: "Tabular Accuracy", value: 99, suffix: "%", emoji: "🎯" },
+      { label: "Query Performance", value: 40, suffix: "%+", emoji: "⚡" },
+      { label: "Core Optimization", value: 15, suffix: "-20%", emoji: "📈" },
     ],
     achievements: [
-      'Built B2B solutions using NextJS, Python, GraphQL, PostgreSQL, and FastAPI',
-      'Designed on-premise OCR pipeline for secure document processing',
-      'Developed NLP-based pipelines achieving 99% tabular accuracy',
-      'Architected schema-driven document processing platform',
-      'Implemented webhook-based APIs for third-party integrations',
-      'Delivered 2-3 POCs for government and defense organizations',
-      'Replaced similarity search with vector database (40% improvement)',
-      'Refactored backend architecture (15-20% performance boost)',
+      "Built B2B solutions using NextJS, Python, GraphQL, PostgreSQL, and FastAPI",
+      "Designed on-premise OCR pipeline for secure document processing",
+      "Developed NLP-based pipelines achieving 99% tabular accuracy",
+      "Architected schema-driven document processing platform",
+      "Implemented webhook-based APIs for third-party integrations",
+      "Delivered 2-3 POCs for government and defense organizations",
+      "Replaced similarity search with vector database (40% improvement)",
+      "Refactored backend architecture (15-20% performance boost)",
     ],
-    tech: [SiNextdotjs, SiPostgresql, SiGraphql, SiFastapi, FaPython],
+    tech: ["Next.js", "Python", "GraphQL", "PostgreSQL", "FastAPI"],
   },
   {
-    title: 'MERN Stack Intern',
-    company: 'LD College of Engineering',
-    location: 'Ahmedabad',
-    period: '2023',
-    description: 'Developed dynamic solutions for educational workflows.',
-    highlights: [
-      { text: 'Manual Tasks Reduced', value: '30%', icon: 'trending-down' },
-      { text: 'Team Collaboration', value: '3+', icon: 'users' },
+    title: "MERN Stack Intern",
+    company: "LD College of Engineering",
+    location: "Ahmedabad",
+    period: "2023",
+    description: "Developed dynamic solutions for educational workflows.",
+    metrics: [
+      { label: "Manual Tasks Reduced", value: 30, suffix: "%", emoji: "📉" },
+      { label: "Team Collaboration", value: 3, suffix: "+", emoji: "👥" },
     ],
     achievements: [
-      'Developed dynamic dashboard with real-time email notifications',
-      'Built Excel-based data extraction and linking systems',
-      'Reduced manual follow-ups by 30%',
-      'Collaborated using Git with 3+ contributors',
-      'Enforced modular, object-oriented coding practices',
+      "Developed dynamic dashboard with real-time email notifications",
+      "Built Excel-based data extraction and linking systems",
+      "Reduced manual follow-ups by 30%",
+      "Collaborated using Git with 3+ contributors",
+      "Enforced modular, object-oriented coding practices",
     ],
-    tech: [FaReact, FaNodeJs, FaDatabase, SiNextdotjs],
+    tech: ["React", "Node.js", "MongoDB", "Express"],
   },
 ];
 
-const iconMap: Record<string, string> = {
-  target: '🎯',
-  zap: '⚡',
-  'trending-up': '📈',
-  'trending-down': '📉',
-  users: '👥',
-};
+function AnimatedMetric({
+  value,
+  suffix,
+}: {
+  value: number;
+  suffix: string;
+}) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const [count, setCount] = useState(0);
+
+  useState(() => {
+    // We'll use useInView below
+  });
+
+  // Simple count-up
+  const countRef = useRef(false);
+  if (isInView && !countRef.current) {
+    countRef.current = true;
+    let current = 0;
+    const step = value / 30;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= value) {
+        current = value;
+        clearInterval(timer);
+      }
+      setCount(Math.floor(current));
+    }, 40);
+  }
+
+  return (
+    <span ref={ref} className="tabular-nums font-bold text-lg" style={{ color: "var(--color-secondary)" }}>
+      {count}
+      {suffix}
+    </span>
+  );
+}
 
 export default function Experience() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [expandedIndex, setExpandedIndex] = useState(0);
 
   return (
-    <section id="experience" className="py-24 px-4 bg-navy-950" ref={ref}>
+    <div className="py-24 px-4">
       <div className="max-w-5xl mx-auto">
         {/* Section Title */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-cream-100 mb-4">
-            Experience <span className="text-teal-400">Timeline</span>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            Experience{" "}
+            <span style={{ color: "var(--color-primary)" }}>Timeline</span>
           </h2>
-          <div className="w-20 h-1 bg-teal-400 mx-auto rounded-full" />
-          <p className="mt-6 text-navy-700 max-w-2xl mx-auto">
-            My professional journey, highlighting key contributions and impact.
-          </p>
+          <div
+            className="w-16 h-0.5 mx-auto rounded-full"
+            style={{ background: "var(--color-primary)" }}
+          />
         </motion.div>
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Timeline Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-teal-400 to-terra-cotta" />
-
-          {experiences.map((exp, index) => (
-            <motion.div
-              key={exp.title}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`relative mb-12 md:mb-16 ${
-                index % 2 === 0 ? 'md:pr-1/2 md:text-right' : 'md:pl-1/2 md:ml-auto md:w-1/2'
-              }`}
-            >
-              {/* Timeline Dot */}
-              <div className={`absolute left-4 top-6 w-4 h-4 bg-teal-400 rounded-full border-4 border-navy-950 transform -translate-x-1/2 z-10 ${
-                index % 2 === 0 ? '' : 'md:left-auto md:right-0 md:translate-x-1/2'
-              }`} />
-
-              {/* Experience Card */}
-              <div
-                className={`ml-12 md:ml-0 ${
-                  index % 2 === 0 ? 'md:mr-12' : 'md:ml-12'
-                }`}
+        <TracingBeam>
+          <div className="flex flex-col gap-10 pl-8 md:pl-16">
+            {experiences.map((exp, index) => (
+              <motion.div
+                key={exp.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <motion.div
-                  className="bg-navy-800 rounded-2xl p-6 border-2 border-navy-700 hover:border-teal-400/50 transition-all duration-300 cursor-pointer"
-                  onClick={() => setExpandedIndex(expandedIndex === index ? -1 : index)}
-                  whileHover={{ scale: 1.02 }}
-                >
+                <GlowingBorder className="p-6">
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`flex-1 ${index % 2 === 0 ? 'md:text-right' : ''}`}>
-                      <h3 className="text-xl font-bold text-cream-100 mb-1">{exp.title}</h3>
-                      <p className="text-teal-400 font-medium">{exp.company}</p>
-                      <p className="text-navy-700 text-sm mt-1">
-                        {exp.location} • {exp.period}
+                    <div>
+                      <h3 className="text-xl font-bold text-neutral-200">
+                        {exp.title}
+                      </h3>
+                      <p
+                        className="font-medium text-sm"
+                        style={{ color: "var(--color-primary)" }}
+                      >
+                        {exp.company}
+                      </p>
+                      <p className="text-neutral-500 text-xs mt-1">
+                        {exp.location} · {exp.period}
                       </p>
                     </div>
-                    <motion.div
-                      animate={{ rotate: expandedIndex === index ? 90 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="text-teal-400"
-                    >
-                      <FiExternalLink size={20} />
-                    </motion.div>
+                    <span className="text-xs px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.08] text-neutral-400">
+                      {exp.period}
+                    </span>
                   </div>
 
-                  <p className="text-navy-700 mb-4">{exp.description}</p>
+                  <p className="text-neutral-400 text-sm mb-5">
+                    {exp.description}
+                  </p>
 
-                  {/* Metric Badges */}
-                  <div className="flex flex-wrap gap-3 mb-4">
-                    {exp.highlights.map((highlight) => (
-                      <motion.div
-                        key={highlight.text}
-                        className="relative group"
-                        whileHover={{ scale: 1.05 }}
+                  {/* Metric Cards */}
+                  <div className="flex flex-wrap gap-3 mb-5">
+                    {exp.metrics.map((metric) => (
+                      <div
+                        key={metric.label}
+                        className="flex items-center gap-2 rounded-lg bg-white/[0.03] border border-white/[0.06] px-3 py-2"
                       >
-                        <div className="absolute inset-0 bg-teal-400/20 rounded-full blur-sm group-hover:bg-teal-400/30 transition-all" />
-                        <div className="relative bg-navy-900 rounded-full px-4 py-2 border border-teal-400/30 flex items-center space-x-2">
-                          <span className="text-lg">{iconMap[highlight.icon]}</span>
-                          <span className="text-teal-400 font-bold">{highlight.value}</span>
-                          <span className="text-cream-100 text-sm">{highlight.text}</span>
-                        </div>
-                      </motion.div>
+                        <span className="text-base">{metric.emoji}</span>
+                        <AnimatedMetric
+                          value={metric.value}
+                          suffix={metric.suffix}
+                        />
+                        <span className="text-xs text-neutral-500">
+                          {metric.label}
+                        </span>
+                      </div>
                     ))}
                   </div>
+
+                  {/* Expand toggle */}
+                  <button
+                    onClick={() =>
+                      setExpandedIndex(expandedIndex === index ? -1 : index)
+                    }
+                    className="flex items-center gap-1 text-xs text-neutral-500 hover:text-neutral-300 transition-colors mb-3"
+                  >
+                    <span>
+                      {expandedIndex === index
+                        ? "Hide details"
+                        : "Show contributions"}
+                    </span>
+                    <motion.span
+                      animate={{
+                        rotate: expandedIndex === index ? 180 : 0,
+                      }}
+                    >
+                      <FiChevronDown className="w-3 h-3" />
+                    </motion.span>
+                  </button>
 
                   {/* Expandable Achievements */}
                   <motion.div
                     initial={false}
-                    animate={{ height: expandedIndex === index ? 'auto' : 0, opacity: expandedIndex === index ? 1 : 0 }}
+                    animate={{
+                      height: expandedIndex === index ? "auto" : 0,
+                      opacity: expandedIndex === index ? 1 : 0,
+                    }}
                     transition={{ duration: 0.3 }}
                     className="overflow-hidden"
                   >
-                    <div className="pt-4 border-t border-navy-700">
-                      <h4 className="text-cream-100 font-semibold mb-3">Key Contributions:</h4>
-                      <ul className="space-y-2">
-                        {exp.achievements.map((achievement, i) => (
-                          <motion.li
-                            key={i}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: i * 0.05 }}
-                            className="flex items-start text-navy-700"
+                    <ul className="space-y-2 pt-3 border-t border-white/[0.05]">
+                      {exp.achievements.map((achievement, i) => (
+                        <motion.li
+                          key={i}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={
+                            expandedIndex === index
+                              ? { opacity: 1, x: 0 }
+                              : {}
+                          }
+                          transition={{ delay: i * 0.05 }}
+                          className="flex items-start text-sm text-neutral-400"
+                        >
+                          <span
+                            className="mr-2 mt-0.5 text-xs"
+                            style={{ color: "var(--color-primary)" }}
                           >
-                            <span className="text-teal-400 mr-2 mt-1">→</span>
-                            <span>{achievement}</span>
-                          </motion.li>
-                        ))}
-                      </ul>
-                    </div>
+                            ▸
+                          </span>
+                          <span>{achievement}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
                   </motion.div>
 
                   {/* Tech Stack */}
-                  <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-navy-700">
-                    {exp.tech.map((TechIcon, i) => (
-                      <div
-                        key={i}
-                        className="w-8 h-8 bg-navy-900 rounded-lg flex items-center justify-center text-teal-400 hover:bg-teal-400/10 transition-colors"
-                        title={TechIcon.name}
+                  <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-white/[0.05]">
+                    {exp.tech.map((tech) => (
+                      <span
+                        key={tech}
+                        className="relative inline-flex overflow-hidden rounded-full p-[1px]"
                       >
-                        <TechIcon size={18} />
-                      </div>
+                        <span className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,var(--color-primary)_0%,transparent_50%,var(--color-primary)_100%)] opacity-30" />
+                        <span className="inline-flex items-center rounded-full bg-neutral-950 px-3 py-1 text-xs text-neutral-300 backdrop-blur-3xl">
+                          {tech}
+                        </span>
+                      </span>
                     ))}
                   </div>
-                </motion.div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                </GlowingBorder>
+              </motion.div>
+            ))}
+          </div>
+        </TracingBeam>
       </div>
-    </section>
+    </div>
   );
 }
