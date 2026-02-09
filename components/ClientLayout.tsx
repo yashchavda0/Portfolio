@@ -18,7 +18,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
         <CommandPalette />
         <EasterEggTerminal />
         <main className="relative">{children}</main>
-        <footer className="py-8 text-center text-neutral-600 border-t border-white/[0.05]">
+        <footer className="py-8 pb-24 md:pb-28 text-center text-neutral-600 border-t border-white/[0.05]">
           <p className="text-sm">
             Designed & Built by{" "}
             <span style={{ color: "var(--color-primary)" }}>Yash Chavda</span> ©{" "}
