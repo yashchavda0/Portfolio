@@ -9,7 +9,7 @@ interface ThemeContextValue {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: "charcoal-coral",
+  theme: "noir-cyan",
   setTheme: () => {},
 });
 
