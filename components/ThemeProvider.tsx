@@ -50,7 +50,7 @@ function hexToRgb(hex: string): string {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeKey>("charcoal-coral");
+  const [theme, setThemeState] = useState<ThemeKey>("noir-cyan");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
