@@ -59,7 +59,7 @@ export default function Education() {
             Education &{" "}
             <span style={{ color: "var(--color-primary)" }}>Achievements</span>
           </h2>
-          <p className="text-neutral-500 max-w-md mx-auto">
+          <p className="text-[var(--color-text-muted)] max-w-md mx-auto">
             The academic journey and milestones that shaped my career
           </p>
         </motion.div>
@@ -72,7 +72,7 @@ export default function Education() {
                 className="w-5 h-5"
                 style={{ color: "var(--color-primary)" }}
               />
-              <h3 className="text-xl font-semibold text-neutral-200">
+              <h3 className="text-xl font-semibold text-[var(--color-text-secondary)]">
                 Education
               </h3>
             </div>
@@ -81,7 +81,7 @@ export default function Education() {
               {education.map((edu, i) => (
                 <WobbleCard key={edu.institution} containerClassName="min-h-0">
                   <div className="relative p-5 z-10">
-                    <h4 className="text-lg font-bold text-neutral-100">
+                    <h4 className="text-lg font-bold text-[var(--color-text-primary)]">
                       {edu.degree}
                     </h4>
                     <p
@@ -90,7 +90,7 @@ export default function Education() {
                     >
                       {edu.institution}
                     </p>
-                    <p className="text-neutral-500 text-xs mt-0.5">
+                    <p className="text-[var(--color-text-muted)] text-xs mt-0.5">
                       {edu.period}
                     </p>
 
@@ -126,7 +126,7 @@ export default function Education() {
                 className="w-5 h-5"
                 style={{ color: "var(--color-secondary)" }}
               />
-              <h3 className="text-xl font-semibold text-neutral-200">
+              <h3 className="text-xl font-semibold text-[var(--color-text-secondary)]">
                 Achievements
               </h3>
             </div>
@@ -151,7 +151,7 @@ export default function Education() {
                       {a.icon}
                     </span>
                     <div>
-                      <h4 className="font-bold text-neutral-100 group-hover:text-white transition-colors">
+                      <h4 className="font-bold text-[var(--color-text-primary)] group-hover:text-white transition-colors">
                         {a.title}
                       </h4>
                       <p
@@ -160,7 +160,7 @@ export default function Education() {
                       >
                         {a.event}
                       </p>
-                      <p className="text-neutral-500 text-sm mt-1.5">
+                      <p className="text-[var(--color-text-muted)] text-sm mt-1.5">
                         {a.description}
                       </p>
                     </div>

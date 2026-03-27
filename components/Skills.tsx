@@ -20,14 +20,24 @@ const skills: Skill[] = [
   // Frameworks
   { name: "React", level: 90, category: "Frameworks" },
   { name: "Next.js", level: 85, category: "Frameworks" },
+  { name: "FastAPI", level: 85, category: "Frameworks" },
   { name: "Node.js", level: 85, category: "Frameworks" },
   { name: "Express", level: 80, category: "Frameworks" },
-  { name: "NumPy", level: 75, category: "Frameworks" },
   // Databases
   { name: "PostgreSQL", level: 85, category: "Databases" },
-  { name: "MySQL", level: 80, category: "Databases" },
+  { name: "Milvus", level: 80, category: "Databases" },
   { name: "MongoDB", level: 75, category: "Databases" },
-  { name: "GraphQL", level: 80, category: "Databases" },
+  { name: "MySQL", level: 80, category: "Databases" },
+  // AI/ML
+  { name: "LLMs", level: 85, category: "AI/ML" },
+  { name: "RAG", level: 85, category: "AI/ML" },
+  { name: "NLP", level: 80, category: "AI/ML" },
+  { name: "OCR", level: 80, category: "AI/ML" },
+  // Tools
+  { name: "Docker", level: 85, category: "Tools" },
+  { name: "Linux", level: 80, category: "Tools" },
+  { name: "Git", level: 90, category: "Tools" },
+  { name: "GraphQL", level: 80, category: "Tools" },
   // Core
   { name: "DSA", level: 90, category: "Core" },
   { name: "Algorithms", level: 85, category: "Core" },
@@ -35,12 +45,14 @@ const skills: Skill[] = [
   { name: "DBMS", level: 85, category: "Core" },
 ];
 
-const categories = ["All", "Languages", "Frameworks", "Databases", "Core"];
+const categories = ["All", "Languages", "Frameworks", "Databases", "AI/ML", "Tools", "Core"];
 
 const categoryColors: Record<string, string> = {
   Languages: "var(--color-primary)",
   Frameworks: "var(--color-secondary)",
   Databases: "var(--color-primary)",
+  "AI/ML": "var(--color-secondary)",
+  Tools: "var(--color-primary)",
   Core: "var(--color-secondary)",
 };
 
@@ -231,7 +243,7 @@ function SkillGrid({ filteredSkills }: { filteredSkills: Skill[] }) {
           className="relative overflow-hidden rounded-xl border border-white/5 bg-white/[0.02] p-4 group hover:border-white/10 transition-colors"
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-neutral-200 font-medium">
+            <span className="text-sm text-[var(--color-text-secondary)] font-medium">
               {skill.name}
             </span>
             <span
@@ -252,7 +264,7 @@ function SkillGrid({ filteredSkills }: { filteredSkills: Skill[] }) {
               transition={{ duration: 1, delay: i * 0.05 }}
             />
           </div>
-          <span className="text-[10px] text-neutral-500 mt-1 block">
+          <span className="text-[10px] text-[var(--color-text-muted)] mt-1 block">
             {skill.category}
           </span>
         </motion.div>
@@ -287,7 +299,7 @@ export default function Skills() {
             Technical{" "}
             <span style={{ color: "var(--color-primary)" }}>Arsenal</span>
           </h2>
-          <p className="text-neutral-500 max-w-md mx-auto">
+          <p className="text-[var(--color-text-muted)] max-w-md mx-auto">
             Technologies and tools I use to bring ideas to life
           </p>
         </motion.div>
@@ -300,8 +312,8 @@ export default function Skills() {
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-1.5 rounded-full text-sm transition-all border ${
                 activeCategory === cat
-                  ? "border-white/20 bg-white/10 text-white"
-                  : "border-white/5 text-neutral-500 hover:text-neutral-300 hover:border-white/10"
+                  ? "border-white/20 bg-white/10 text-[var(--color-text-primary)]"
+                  : "border-white/5 text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] hover:border-white/10"
               }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -323,14 +335,18 @@ export default function Skills() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-center text-neutral-600 text-sm mt-8"
+          className="text-center text-[var(--color-text-muted)] text-sm mt-8"
         >
-          Currently exploring{" "}
+          Actively building with{" "}
           <span style={{ color: "var(--color-primary)" }}>
-            Machine Learning
+            LLMs
           </span>{" "}
-          &{" "}
-          <span style={{ color: "var(--color-secondary)" }}>Data Science</span>
+          ·{" "}
+          <span style={{ color: "var(--color-secondary)" }}>RAG</span>
+          {" "}·{" "}
+          <span style={{ color: "var(--color-primary)" }}>Vector Databases</span>
+          {" "}·{" "}
+          <span style={{ color: "var(--color-secondary)" }}>Distributed Systems</span>
         </motion.p>
       </div>
     </div>

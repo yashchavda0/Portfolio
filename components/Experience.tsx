@@ -11,24 +11,26 @@ const experiences = [
     title: "Trainee Software Engineer",
     company: "Silver Touch Technologies Ltd.",
     location: "Ahmedabad",
-    period: "Present",
-    description: "Building B2B solutions with cutting-edge tech stack.",
+    period: "2024 – Present",
+    description: "Building production AI systems with cutting-edge tech stack.",
     metrics: [
       { label: "Tabular Accuracy", value: 99, suffix: "%", emoji: "🎯" },
-      { label: "Query Performance", value: 40, suffix: "%+", emoji: "⚡" },
-      { label: "Core Optimization", value: 15, suffix: "-20%", emoji: "📈" },
+      { label: "SQL Dependency Cut", value: 70, suffix: "%", emoji: "🧠" },
+      { label: "Config Effort Reduced", value: 50, suffix: "%", emoji: "⚙️" },
+      { label: "Vector Retrieval Boost", value: 40, suffix: "%", emoji: "⚡" },
+      { label: "System Uptime", value: 99, suffix: "%+", emoji: "🚀" },
     ],
     achievements: [
-      "Built B2B solutions using NextJS, Python, GraphQL, PostgreSQL, and FastAPI",
-      "Designed on-premise OCR pipeline for secure document processing",
-      "Developed NLP-based pipelines achieving 99% tabular accuracy",
-      "Architected schema-driven document processing platform",
-      "Implemented webhook-based APIs for third-party integrations",
-      "Delivered 2-3 POCs for government and defense organizations",
-      "Replaced similarity search with vector database (40% improvement)",
-      "Refactored backend architecture (15-20% performance boost)",
+      "Engineered LLM-driven multi-agent orchestration system with dynamic task routing — reduced incorrect tool usage by 40%",
+      "Designed Natural Language → SQL system using RAG-based schema understanding — cut SQL dependency by 70% at sub-2s latency",
+      "Built workflow automation engine with triggers, hooks, and rule-based execution — reduced manual configuration effort by 50%",
+      "Developed vector search systems using Milvus — improved semantic retrieval performance by 40%",
+      "Developed NLP/OCR pipelines achieving 99% tabular accuracy for enterprise document processing",
+      "Delivered production B2B AI systems using Next.js, Python, FastAPI, GraphQL, and PostgreSQL",
+      "Deployed systems via Docker and Linux ensuring 99%+ uptime",
+      "Delivered POCs for government and defense organizations",
     ],
-    tech: ["Next.js", "Python", "GraphQL", "PostgreSQL", "FastAPI"],
+    tech: ["Next.js", "Python", "FastAPI", "GraphQL", "PostgreSQL", "Milvus"],
   },
   {
     title: "MERN Stack Intern",
@@ -127,7 +129,7 @@ export default function Experience() {
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h3 className="text-xl font-bold text-neutral-200">
+                      <h3 className="text-xl font-bold text-[var(--color-text-secondary)]">
                         {exp.title}
                       </h3>
                       <p
@@ -136,7 +138,7 @@ export default function Experience() {
                       >
                         {exp.company}
                       </p>
-                      <p className="text-neutral-500 text-xs mt-1">
+                      <p className="text-[var(--color-text-muted)] text-xs mt-1">
                         {exp.location} · {exp.period}
                       </p>
                     </div>
@@ -161,7 +163,7 @@ export default function Experience() {
                           value={metric.value}
                           suffix={metric.suffix}
                         />
-                        <span className="text-xs text-neutral-500">
+                        <span className="text-xs text-[var(--color-text-muted)]">
                           {metric.label}
                         </span>
                       </div>
@@ -173,7 +175,7 @@ export default function Experience() {
                     onClick={() =>
                       setExpandedIndex(expandedIndex === index ? -1 : index)
                     }
-                    className="flex items-center gap-1 text-xs text-neutral-500 hover:text-neutral-300 transition-colors mb-3"
+                    className="flex items-center gap-1 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors mb-3"
                   >
                     <span>
                       {expandedIndex === index
@@ -232,7 +234,7 @@ export default function Experience() {
                         className="relative inline-flex overflow-hidden rounded-full p-[1px]"
                       >
                         <span className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,var(--color-primary)_0%,transparent_50%,var(--color-primary)_100%)] opacity-30" />
-                        <span className="inline-flex items-center rounded-full bg-neutral-950 px-3 py-1 text-xs text-neutral-300 backdrop-blur-3xl">
+                        <span className="inline-flex items-center rounded-full bg-[var(--color-card-bg)] px-3 py-1 text-xs text-neutral-300 backdrop-blur-3xl">
                           {tech}
                         </span>
                       </span>

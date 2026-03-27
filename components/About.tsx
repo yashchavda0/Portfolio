@@ -7,7 +7,6 @@ import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import {
   FiCode,
-  FiBriefcase,
   FiMapPin,
   FiZap,
   FiHeart,
@@ -19,8 +18,8 @@ import {
   SiPython,
   SiTypescript,
   SiPostgresql,
-  SiNodedotjs,
-  SiTailwindcss,
+  SiFastapi,
+  SiMilvus,
   SiDocker,
 } from "react-icons/si";
 
@@ -30,8 +29,8 @@ const techItems = [
   { name: "Python", icon: <SiPython /> },
   { name: "TypeScript", icon: <SiTypescript /> },
   { name: "PostgreSQL", icon: <SiPostgresql /> },
-  { name: "Node.js", icon: <SiNodedotjs /> },
-  { name: "Tailwind", icon: <SiTailwindcss /> },
+  { name: "FastAPI", icon: <SiFastapi /> },
+  { name: "Milvus", icon: <SiMilvus /> },
   { name: "Docker", icon: <SiDocker /> },
 ];
 
@@ -91,7 +90,7 @@ export default function About() {
             title="The Person Behind the Code"
             description={
               <TextGenerateEffect
-                words="I'm an aspiring software engineer with hands-on experience in full-stack development. I thrive on building elegant, scalable applications and exploring the intersections of AI and modern web technologies. Currently expanding my expertise in Data Science and Machine Learning."
+                words="Software Engineer specializing in AI systems and backend architecture. I build production-grade LLM-driven applications, multi-agent orchestration systems, and scalable data pipelines. Strong focus on performance, reliability, and measurable impact."
                 className="text-sm font-normal text-neutral-400"
                 duration={0.3}
               />
@@ -103,27 +102,34 @@ export default function About() {
           <BentoGridItem
             title="By the Numbers"
             description={
-              <div className="flex flex-col gap-3 mt-2">
+              <div className="flex flex-col gap-2.5 mt-2">
                 <div className="flex items-center gap-3">
-                  <FiCode className="w-4 h-4 text-neutral-500" />
-                  <span className="text-2xl font-bold text-white">
+                  <FiCode className="w-4 h-4 text-[var(--color-text-muted)]" />
+                  <span className="text-2xl font-bold text-[var(--color-text-primary)]">
                     <CountUp target={10} suffix="+" />
                   </span>
-                  <span className="text-xs text-neutral-500">Projects</span>
+                  <span className="text-xs text-[var(--color-text-muted)]">Projects</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <FiBriefcase className="w-4 h-4 text-neutral-500" />
-                  <span className="text-2xl font-bold text-white">
-                    <CountUp target={2} suffix="+" />
+                  <FiZap className="w-4 h-4 text-[var(--color-text-muted)]" />
+                  <span className="text-2xl font-bold text-[var(--color-text-primary)]">
+                    <CountUp target={99} suffix="%+" />
                   </span>
-                  <span className="text-xs text-neutral-500">Years Exp</span>
+                  <span className="text-xs text-[var(--color-text-muted)]">Uptime</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <FaTrophy className="w-4 h-4 text-neutral-500" />
-                  <span className="text-2xl font-bold text-white">
+                  <FiZap className="w-4 h-4 text-[var(--color-text-muted)]" />
+                  <span className="text-2xl font-bold text-[var(--color-text-primary)]">
+                    <CountUp target={70} suffix="%" />
+                  </span>
+                  <span className="text-xs text-[var(--color-text-muted)]">SQL Reduced</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FaTrophy className="w-4 h-4 text-[var(--color-text-muted)]" />
+                  <span className="text-2xl font-bold text-[var(--color-text-primary)]">
                     <CountUp target={1} />
                   </span>
-                  <span className="text-xs text-neutral-500">Hackathon Won</span>
+                  <span className="text-xs text-[var(--color-text-muted)]">Hackathon Won</span>
                 </div>
               </div>
             }
@@ -135,7 +141,7 @@ export default function About() {
             description={
               <div className="flex items-center gap-2 mt-2">
                 <FiMapPin style={{ color: "var(--color-secondary)" }} />
-                <span className="text-neutral-300">Ahmedabad, India</span>
+                <span className="text-[var(--color-text-secondary)]">Ahmedabad, India</span>
               </div>
             }
             header={
@@ -161,10 +167,10 @@ export default function About() {
                       style={{ background: "var(--color-secondary)" }}
                     />
                   </span>
-                  <span className="text-xs text-neutral-400">Open to opportunities</span>
+                  <span className="text-xs text-[var(--color-text-muted)]">Open to opportunities</span>
                 </div>
-                <p className="text-neutral-300 text-sm">
-                  Building at <span className="font-medium text-white">Silver Touch Technologies</span>
+                <p className="text-[var(--color-text-secondary)] text-sm">
+                  Building at <span className="font-medium text-[var(--color-text-primary)]">Silver Touch Technologies</span>
                 </p>
               </div>
             }

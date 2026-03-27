@@ -9,6 +9,10 @@
   --color-primary-rgb: 244, 114, 182;
   --color-secondary-rgb: 52, 211, 153;
   --color-bg-rgb: 17, 17, 17;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #d4d4d8;
+  --color-text-muted: #a1a1aa;
+  --color-card-bg: #18181b;
 }
 
 @layer base {
@@ -22,26 +26,19 @@
 
   body {
     background-color: var(--color-bg);
-    color: #fafafa;
+    color: var(--color-text-primary);
     @apply antialiased;
     font-family: "Inter", system-ui, sans-serif;
   }
 
   ::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  ::-webkit-scrollbar-track {
+    width: 0px;
     background: transparent;
   }
 
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-primary);
-    border-radius: 999px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    opacity: 0.8;
+  html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 }
 

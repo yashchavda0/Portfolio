@@ -2,6 +2,7 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { IconMaximize, IconCode } from "@tabler/icons-react";
 
 export function ExpandableCard({
   cards,
@@ -15,6 +16,7 @@ export function ExpandableCard({
     ctaLink?: string;
     content: React.ReactNode;
     tags?: string[];
+    tagsWithIcons?: { name: string; icon: React.ComponentType<{ className?: string }> }[];
   }[];
   className?: string;
 }) {
@@ -69,40 +71,53 @@ export function ExpandableCard({
             <motion.div
               layoutId={`card-${active.title}-${id}`}
               ref={ref}
-              className="w-full max-w-[600px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-neutral-900 sm:rounded-3xl overflow-hidden border border-white/[0.08]"
+              className="w-full max-w-[600px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-[var(--color-card-bg)] sm:rounded-3xl overflow-hidden border border-white/[0.08]"
             >
               {active.src && (
                 <motion.div layoutId={`image-${active.title}-${id}`}>
-                  <div className="w-full h-60 bg-gradient-to-br from-[var(--color-primary)]/20 to-[var(--color-secondary)]/20 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-white/20">
-                      {active.title.charAt(0)}
-                    </span>
+                  <div className="w-full h-60 bg-gradient-to-br from-[var(--color-primary)]/20 to-[var(--color-secondary)]/20 flex items-center justify-center relative overflow-hidden">
+                    {/* Subtle pattern overlay */}
+                    <div className="absolute inset-0 opacity-20" style={{
+                      backgroundImage: `radial-gradient(circle, var(--color-primary) 1px, transparent 1px)`,
+                      backgroundSize: '20px 20px'
+                    }}></div>
+                    {/* Tech icon instead of just first letter */}
+                    <div className="relative z-10 flex flex-col items-center gap-2">
+                      <IconCode className="w-12 h-12 text-[var(--color-primary)]/40" />
+                      <span className="text-sm font-semibold text-[var(--color-text-primary)]/20 uppercase tracking-wider">
+                        {active.title}
+                      </span>
+                    </div>
                   </div>
                 </motion.div>
               )}
               <div className="p-6">
                 <motion.h3
                   layoutId={`title-${active.title}-${id}`}
-                  className="font-bold text-xl text-neutral-200"
+                  className="font-bold text-xl text-[var(--color-text-secondary)]"
                 >
                   {active.title}
                 </motion.h3>
                 <motion.p
                   layoutId={`description-${active.description}-${id}`}
-                  className="text-neutral-400 mt-2"
+                  className="text-[var(--color-text-muted)] mt-2"
                 >
                   {active.description}
                 </motion.p>
-                {active.tags && (
+                {active.tagsWithIcons && (
                   <div className="flex flex-wrap gap-2 mt-4">
-                    {active.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-3 py-1 text-xs rounded-full bg-white/[0.05] border border-white/[0.08] text-neutral-300"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                    {active.tagsWithIcons.map((tag) => {
+                      const IconComponent = tag.icon;
+                      return (
+                        <span
+                          key={tag.name}
+                          className="px-3 py-1 text-xs rounded-full bg-white/[0.05] border border-white/[0.08] text-[var(--color-text-muted)] inline-flex items-center gap-1.5"
+                        >
+                          <IconComponent className="w-3.5 h-3.5" />
+                          {tag.name}
+                        </span>
+                      );
+                    })}
                   </div>
                 )}
                 <motion.div
@@ -110,7 +125,7 @@ export function ExpandableCard({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="text-neutral-400 text-sm mt-4 overflow-auto max-h-[40vh] pr-2"
+                  className="text-[var(--color-text-muted)] text-sm mt-4 overflow-auto max-h-[40vh] pr-2"
                 >
                   {active.content}
                 </motion.div>
@@ -139,20 +154,34 @@ export function ExpandableCard({
             layoutId={`card-${card.title}-${id}`}
             key={`card-${card.title}-${id}`}
             onClick={() => setActive(card)}
-            className="p-4 flex flex-col bg-white/[0.02] border border-white/[0.05] rounded-xl cursor-pointer hover:bg-white/[0.04] transition-colors group"
+            className="p-4 flex flex-col bg-white/[0.02] border border-white/[0.05] rounded-xl cursor-pointer hover:bg-white/[0.04] transition-colors group relative"
           >
+            {/* Expand Icon */}
+            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+              <IconMaximize className="w-5 h-5 text-[var(--color-primary)]" />
+            </div>
+
             {card.src && (
               <motion.div layoutId={`image-${card.title}-${id}`}>
-                <div className="w-full h-40 rounded-lg bg-gradient-to-br from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10 flex items-center justify-center mb-4">
-                  <span className="text-6xl font-bold text-white/10 group-hover:text-white/20 transition-colors">
-                    {card.title.charAt(0)}
-                  </span>
+                <div className="w-full h-40 rounded-lg bg-gradient-to-br from-[var(--color-primary)]/10 to-[var(--color-secondary)]/10 flex items-center justify-center mb-4 relative overflow-hidden">
+                  {/* Subtle pattern overlay */}
+                  <div className="absolute inset-0 opacity-20" style={{
+                    backgroundImage: `radial-gradient(circle, var(--color-primary) 1px, transparent 1px)`,
+                    backgroundSize: '20px 20px'
+                  }}></div>
+                  {/* Tech icon instead of just first letter */}
+                  <div className="relative z-10 flex flex-col items-center gap-2">
+                    <IconCode className="w-10 h-10 text-[var(--color-primary)]/30 group-hover:text-[var(--color-primary)]/50 transition-colors" />
+                    <span className="text-xs font-semibold text-[var(--color-text-primary)]/20 group-hover:text-[var(--color-text-primary)]/40 transition-colors uppercase tracking-wider">
+                      Project
+                    </span>
+                  </div>
                 </div>
               </motion.div>
             )}
             <motion.h3
               layoutId={`title-${card.title}-${id}`}
-              className="font-semibold text-neutral-200 text-lg"
+              className="font-semibold text-[var(--color-text-secondary)] text-lg"
             >
               {card.title}
             </motion.h3>
@@ -162,16 +191,20 @@ export function ExpandableCard({
             >
               {card.description}
             </motion.p>
-            {card.tags && (
+            {card.tagsWithIcons && (
               <div className="flex flex-wrap gap-1.5 mt-3">
-                {card.tags.slice(0, 4).map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-0.5 text-[10px] rounded-full bg-white/[0.05] text-neutral-400"
-                  >
-                    {tag}
-                  </span>
-                ))}
+                {card.tagsWithIcons.slice(0, 4).map((tag) => {
+                  const IconComponent = tag.icon;
+                  return (
+                    <span
+                      key={tag.name}
+                      className="px-2 py-0.5 text-[10px] rounded-full bg-white/[0.05] text-[var(--color-text-muted)] inline-flex items-center gap-1"
+                    >
+                      <IconComponent className="w-3 h-3" />
+                      {tag.name}
+                    </span>
+                  );
+                })}
               </div>
             )}
           </motion.div>

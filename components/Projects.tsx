@@ -5,8 +5,55 @@ import { ExpandableCard } from "@/components/ui/expandable-card";
 import { LampEffect } from "@/components/ui/lamp-effect";
 import { FiGithub } from "react-icons/fi";
 import { MovingBorderButton } from "@/components/ui/moving-border";
+import { SiNextdotjs, SiStripe, SiCloudinary, SiNodedotjs, SiMongodb, SiExpress, SiFastapi, SiPostgresql, SiPython } from "react-icons/si";
+import { FaReact } from "react-icons/fa";
 
 const projects = [
+  {
+    title: "LLM Multi-Agent Orchestration",
+    description:
+      "Production AI system with dynamic task routing, NL→SQL, and workflow automation.",
+    src: "placeholder",
+    ctaText: "View on GitHub",
+    ctaLink: "https://github.com/yashchavda0",
+    tags: ["Python", "FastAPI", "LLMs", "RAG", "Milvus"],
+    tagsWithIcons: [
+      { name: "Python", icon: SiPython },
+      { name: "FastAPI", icon: SiFastapi },
+      { name: "LLMs", icon: SiFastapi },
+      { name: "RAG", icon: SiFastapi },
+    ],
+    content: (
+      <div className="space-y-3">
+        <p>
+          Production-grade multi-agent orchestration system powering enterprise AI workflows.
+        </p>
+        <div className="space-y-2">
+          <h4 className="text-[var(--color-text-secondary)] font-medium text-sm">
+            Key Features:
+          </h4>
+          <ul className="space-y-1.5 text-sm">
+            <li className="flex items-start gap-2">
+              <span style={{ color: "var(--color-secondary)" }}>▸</span>
+              Multi-agent orchestration with dynamic task routing — 40% reduction in incorrect tool usage
+            </li>
+            <li className="flex items-start gap-2">
+              <span style={{ color: "var(--color-secondary)" }}>▸</span>
+              NL→SQL system using RAG-based schema understanding — 70% less manual SQL, sub-2s latency
+            </li>
+            <li className="flex items-start gap-2">
+              <span style={{ color: "var(--color-secondary)" }}>▸</span>
+              Workflow automation engine with triggers, hooks, rule-based execution — 50% less manual config
+            </li>
+            <li className="flex items-start gap-2">
+              <span style={{ color: "var(--color-secondary)" }}>▸</span>
+              Milvus vector search — 40% improvement in semantic retrieval
+            </li>
+          </ul>
+        </div>
+      </div>
+    ),
+  },
   {
     title: "Imaginify",
     description:
@@ -15,6 +62,12 @@ const projects = [
     ctaText: "View on GitHub",
     ctaLink: "https://github.com/yashchavda0",
     tags: ["Next.js", "React", "Stripe", "Cloudinary"],
+    tagsWithIcons: [
+      { name: "Next.js", icon: SiNextdotjs },
+      { name: "React", icon: FaReact },
+      { name: "Stripe", icon: SiStripe },
+      { name: "Cloudinary", icon: SiCloudinary },
+    ],
     content: (
       <div className="space-y-3">
         <p>
@@ -22,7 +75,7 @@ const projects = [
           users interact with visual content.
         </p>
         <div className="space-y-2">
-          <h4 className="text-neutral-200 font-medium text-sm">
+          <h4 className="text-[var(--color-text-secondary)] font-medium text-sm">
             Key Features:
           </h4>
           <ul className="space-y-1.5 text-sm">
@@ -55,6 +108,12 @@ const projects = [
     ctaText: "View on GitHub",
     ctaLink: "https://github.com/yashchavda0",
     tags: ["React", "Node.js", "MongoDB", "Express"],
+    tagsWithIcons: [
+      { name: "React", icon: FaReact },
+      { name: "Node.js", icon: SiNodedotjs },
+      { name: "MongoDB", icon: SiMongodb },
+      { name: "Express", icon: SiExpress },
+    ],
     content: (
       <div className="space-y-3">
         <p>
@@ -62,25 +121,25 @@ const projects = [
           creators through a seamless investment experience.
         </p>
         <div className="space-y-2">
-          <h4 className="text-neutral-200 font-medium text-sm">
+          <h4 className="text-[var(--color-text-secondary)] font-medium text-sm">
             Key Features:
           </h4>
           <ul className="space-y-1.5 text-sm">
             <li className="flex items-start gap-2">
               <span style={{ color: "var(--color-secondary)" }}>▸</span>
-              Creator discovery and profile system
+              Scalable backend logic with investment workflow orchestration
             </li>
             <li className="flex items-start gap-2">
               <span style={{ color: "var(--color-secondary)" }}>▸</span>
-              Investment tracking with real-time portfolio updates
+              Search functionality with smart filtering across creator profiles
             </li>
             <li className="flex items-start gap-2">
               <span style={{ color: "var(--color-secondary)" }}>▸</span>
-              User search with smart filtering
+              Real-time portfolio updates and investment tracking
             </li>
             <li className="flex items-start gap-2">
               <span style={{ color: "var(--color-secondary)" }}>▸</span>
-              Success-sharing revenue model
+              Success-sharing revenue model with transparent analytics
             </li>
           </ul>
         </div>
@@ -94,7 +153,13 @@ const projects = [
     src: "placeholder",
     ctaText: "View on GitHub",
     ctaLink: "https://github.com/yashchavda0",
-    tags: ["Python", "FastAPI", "OCR", "PostgreSQL"],
+    tags: ["Python", "FastAPI", "Docker", "PostgreSQL"],
+    tagsWithIcons: [
+      { name: "Python", icon: SiPython },
+      { name: "FastAPI", icon: SiFastapi },
+      { name: "Docker", icon: SiPostgresql },
+      { name: "PostgreSQL", icon: SiPostgresql },
+    ],
     content: (
       <div className="space-y-3">
         <p>
@@ -102,25 +167,25 @@ const projects = [
           on-premise OCR, NLP-based extraction, and schema-driven processing.
         </p>
         <div className="space-y-2">
-          <h4 className="text-neutral-200 font-medium text-sm">
+          <h4 className="text-[var(--color-text-secondary)] font-medium text-sm">
             Key Features:
           </h4>
           <ul className="space-y-1.5 text-sm">
             <li className="flex items-start gap-2">
               <span style={{ color: "var(--color-secondary)" }}>▸</span>
-              On-premise OCR pipeline for secure document handling
+              Fully Dockerized architecture for consistent deployment
             </li>
             <li className="flex items-start gap-2">
               <span style={{ color: "var(--color-secondary)" }}>▸</span>
-              NLP-based extraction achieving 99% tabular accuracy
+              NLP extraction achieving 99% tabular accuracy
             </li>
             <li className="flex items-start gap-2">
               <span style={{ color: "var(--color-secondary)" }}>▸</span>
-              Schema-driven field extraction for custom document types
+              Multi-page reference resolution for inconsistent documents
             </li>
             <li className="flex items-start gap-2">
               <span style={{ color: "var(--color-secondary)" }}>▸</span>
-              REST API with webhook integrations for third-party systems
+              Standardized JSON pipelines & REST APIs — 60%+ less manual processing
             </li>
           </ul>
         </div>

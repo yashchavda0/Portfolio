@@ -15,15 +15,9 @@ const sections = [
 
 export default function ScrollProgress() {
   const [activeSection, setActiveSection] = useState("hero");
-  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      setScrollProgress((scrollTop / docHeight) * 100);
-
       for (const s of sections) {
         const el = document.getElementById(s.id);
         if (el) {
@@ -50,16 +44,6 @@ export default function ScrollProgress() {
 
   return (
     <>
-      {/* Top progress bar */}
-      <motion.div
-        className="fixed top-0 left-0 h-[2px] z-50"
-        style={{
-          width: `${scrollProgress}%`,
-          background:
-            "linear-gradient(to right, var(--color-primary), var(--color-secondary))",
-        }}
-      />
-
       {/* Side dots */}
       <div className="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-3">
         {sections.map((section) => (

@@ -41,7 +41,7 @@ export const MovingBorder = ({
       />
       <div
         className={cn(
-          "relative bg-neutral-900 rounded-full px-6 py-2 text-sm font-medium text-white z-10 flex items-center justify-center gap-2",
+          "relative bg-[var(--color-card-bg)] rounded-full px-6 py-2 text-sm font-medium text-[var(--color-text-primary)] z-10 flex items-center justify-center gap-2",
           className
         )}
       >
@@ -92,14 +92,14 @@ export const MovingBorderButton = ({
       {href ? (
         <a
           href={href}
-          className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-neutral-950 px-6 py-2.5 text-sm font-medium text-white backdrop-blur-3xl gap-2"
+          className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-[var(--color-card-bg)] px-6 py-2.5 text-sm font-medium text-[var(--color-text-primary)] backdrop-blur-3xl gap-2"
           {...props}
         >
           {content}
         </a>
       ) : (
         <button
-          className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-neutral-950 px-6 py-2.5 text-sm font-medium text-white backdrop-blur-3xl gap-2"
+          className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-[var(--color-card-bg)] px-6 py-2.5 text-sm font-medium text-[var(--color-text-primary)] backdrop-blur-3xl gap-2"
           {...props}
         >
           {content}

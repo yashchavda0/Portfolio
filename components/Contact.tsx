@@ -10,6 +10,7 @@ import {
   FiLinkedin,
   FiCopy,
   FiCheck,
+  FiDownload,
 } from "react-icons/fi";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 
@@ -43,7 +44,7 @@ const socialLinks = [
   {
     name: "LinkedIn",
     icon: FiLinkedin,
-    href: "https://linkedin.com",
+    href: "https://linkedin.com/in/yashchavda",
   },
 ];
 
@@ -73,7 +74,7 @@ export default function Contact() {
           <div className="max-w-lg mx-auto">
             <TextGenerateEffect
               words="Interested in working together? Let's discuss how we can build something amazing."
-              className="text-neutral-500 text-base font-normal"
+              className="text-[var(--color-text-muted)] text-base font-normal"
             />
           </div>
         </motion.div>
@@ -103,10 +104,10 @@ export default function Contact() {
                     style={{ color: "var(--color-primary)" }}
                   />
                 </div>
-                <h3 className="text-neutral-200 font-medium text-sm">
+                <h3 className="text-[var(--color-text-secondary)] font-medium text-sm">
                   {info.label}
                 </h3>
-                <p className="text-neutral-500 text-xs mt-1 break-all">
+                <p className="text-[var(--color-text-muted)] text-xs mt-1 break-all">
                   {info.value}
                 </p>
               </motion.a>
@@ -135,10 +136,10 @@ export default function Contact() {
                 />
               </div>
               <div>
-                <p className="text-neutral-200 text-sm font-medium">
+                <p className="text-[var(--color-text-secondary)] text-sm font-medium">
                   Quick Copy
                 </p>
-                <p className="text-neutral-500 text-xs font-mono">
+                <p className="text-[var(--color-text-muted)] text-xs font-mono">
                   yashchavda2004@gmail.com
                 </p>
               </div>
@@ -148,7 +149,7 @@ export default function Contact() {
               className={`px-5 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all border ${
                 copied
                   ? "border-green-500/50 bg-green-500/10 text-green-400"
-                  : "border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10"
+                  : "border-white/10 bg-white/5 text-[var(--color-text-muted)] hover:bg-white/10"
               }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -166,7 +167,7 @@ export default function Contact() {
           viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <p className="text-neutral-500 text-sm mb-4">
+          <p className="text-[var(--color-text-muted)] text-sm mb-4">
             Find me on social media
           </p>
           <div className="flex items-center justify-center gap-4">
@@ -182,7 +183,7 @@ export default function Contact() {
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Icon className="w-5 h-5 text-neutral-400 group-hover:text-white transition-colors" />
+                  <Icon className="w-5 h-5 text-[var(--color-text-muted)] group-hover:text-[var(--color-text-primary)] transition-colors" />
                 </motion.a>
               );
             })}
@@ -206,10 +207,17 @@ export default function Contact() {
             <p className="text-2xl md:text-3xl font-bold text-neutral-100 mb-2">
               Open to Opportunities
             </p>
-            <p className="text-neutral-500 text-sm">
-              Looking for full-time roles in Software Engineering, Full Stack
-              Development, and AI/ML
+            <p className="text-[var(--color-text-muted)] text-sm mb-4">
+              Looking for full-time roles in Software Engineering, AI Systems, Backend Architecture
             </p>
+            <a
+              href="/Yash_Chavda_CV.pdf"
+              download="Yash_Chavda_CV.pdf"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium border border-white/[0.08] bg-white/5 hover:bg-white/10 hover:border-white/[0.16] transition-all duration-300"
+            >
+              <FiDownload className="w-4 h-4" />
+              Download Resume
+            </a>
           </div>
         </motion.div>
       </div>

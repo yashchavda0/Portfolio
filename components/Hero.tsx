@@ -5,15 +5,15 @@ import { EncryptedText } from "@/components/ui/encrypted-text";
 import { FlipWords } from "@/components/ui/flip-words";
 import { MovingBorderButton } from "@/components/ui/moving-border";
 import { useConfig } from "@/components/ConfigProvider";
-import { FiGithub, FiLinkedin, FiMail, FiArrowDown } from "react-icons/fi";
+import { FiGithub, FiLinkedin, FiMail, FiArrowDown, FiDownload } from "react-icons/fi";
 
 export default function Hero() {
   const { flags } = useConfig();
   const roles = [
     "Software Engineer",
-    "Full Stack Developer",
-    "AI/ML Enthusiast",
-    "Problem Solver",
+    "AI Systems Engineer",
+    "Backend Architect",
+    "LLM Developer",
   ];
 
   return (
@@ -74,10 +74,10 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="text-xl md:text-3xl text-neutral-400 font-light mb-8 h-12 flex items-center justify-center"
+          className="text-xl md:text-3xl text-[var(--color-text-muted)] font-light mb-8 h-12 flex items-center justify-center"
         >
           I&apos;m a
-          <FlipWords words={roles} className="text-neutral-200 font-medium" />
+          <FlipWords words={roles} className="text-[var(--color-text-secondary)] font-medium" />
         </motion.div>
 
         {/* Tagline */}
@@ -85,11 +85,10 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="text-neutral-500 text-lg max-w-xl mx-auto mb-10 leading-relaxed"
+          className="text-[var(--color-text-muted)] text-lg max-w-xl mx-auto mb-10 leading-relaxed"
         >
-          Building elegant digital experiences with clean code and creative
-          thinking. Specializing in full-stack development and AI-powered
-          solutions.
+          Specializing in AI systems, backend architecture, and LLM-driven applications.
+          I build scalable multi-agent systems, workflow automation platforms, and production-grade deployments.
         </motion.p>
 
         {/* CTAs */}
@@ -104,8 +103,16 @@ export default function Hero() {
             <FiArrowDown className="w-4 h-4" />
           </MovingBorderButton>
           <a
+            href="/Yash_Chavda_CV.pdf"
+            download="Yash_Chavda_CV.pdf"
+            className="px-6 py-2.5 text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] border border-white/[0.08] rounded-full hover:border-white/[0.16] transition-all duration-300 flex items-center gap-2"
+          >
+            <FiDownload className="w-4 h-4" />
+            Resume
+          </a>
+          <a
             href="#contact"
-            className="px-6 py-2.5 text-sm font-medium text-neutral-400 hover:text-white border border-white/[0.08] rounded-full hover:border-white/[0.16] transition-all duration-300"
+            className="px-6 py-2.5 text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] border border-white/[0.08] rounded-full hover:border-white/[0.16] transition-all duration-300"
           >
             Get In Touch
           </a>
@@ -140,7 +147,7 @@ export default function Hero() {
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-600 hover:text-[var(--color-primary)] transition-colors duration-300"
+              className="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors duration-300"
               aria-label={social.label}
             >
               {social.icon}
@@ -159,7 +166,7 @@ export default function Hero() {
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-5 h-8 rounded-full border-2 border-neutral-700 flex items-start justify-center p-1"
+          className="w-5 h-8 rounded-full border-2 border-[var(--color-text-muted)] flex items-start justify-center p-1"
         >
           <motion.div
             animate={{ opacity: [0.2, 1, 0.2] }}

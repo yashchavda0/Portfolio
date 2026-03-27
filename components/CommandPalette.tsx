@@ -14,11 +14,21 @@ interface PaletteItem {
 }
 
 const paletteItems: PaletteItem[] = [
-  // Themes
+  // Original Dark Themes
   { id: "t1", label: "Theme: Charcoal + Coral + Sage", section: "theme", themeKey: "charcoal-coral" },
   { id: "t2", label: "Theme: Obsidian + Violet + Amber", section: "theme", themeKey: "obsidian-violet" },
   { id: "t3", label: "Theme: Noir + Cyan + Gold", section: "theme", themeKey: "noir-cyan" },
   { id: "t4", label: "Theme: Midnight + Indigo + Peach", section: "theme", themeKey: "midnight-indigo" },
+  // Light Pastel Themes
+  { id: "t5", label: "Theme: Lavender Dream (Light)", section: "theme", themeKey: "lavender-dream" },
+  { id: "t6", label: "Theme: Peach Sky (Light)", section: "theme", themeKey: "peach-sky" },
+  { id: "t7", label: "Theme: Rose Mint (Light)", section: "theme", themeKey: "rose-mint" },
+  { id: "t8", label: "Theme: Lilac Honey (Light)", section: "theme", themeKey: "lilac-honey" },
+  // Dark Dust Themes
+  { id: "t9", label: "Theme: Charcoal Ash (Dark)", section: "theme", themeKey: "charcoal-ash" },
+  { id: "t10", label: "Theme: Midnight Sage (Dark)", section: "theme", themeKey: "midnight-sage" },
+  { id: "t11", label: "Theme: Forest Fog (Dark)", section: "theme", themeKey: "forest-fog" },
+  { id: "t12", label: "Theme: Ocean Haze (Dark)", section: "theme", themeKey: "ocean-haze" },
   // Toggles
   { id: "c1", label: "Toggle: Cursor Trail", section: "toggle" },
   { id: "c2", label: "Toggle: Encrypted Name", section: "toggle" },
@@ -101,15 +111,15 @@ export default function CommandPalette() {
           >
             {/* Search */}
             <div className="flex items-center gap-3 px-4 py-3 border-b border-white/5">
-              <FiSearch className="w-4 h-4 text-neutral-500 shrink-0" />
+              <FiSearch className="w-4 h-4 text-[var(--color-text-muted)] shrink-0" />
               <input
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search themes & toggles…"
-                className="flex-1 bg-transparent text-neutral-200 text-sm outline-none placeholder:text-neutral-600"
+                className="flex-1 bg-transparent text-[var(--color-text-secondary)] text-sm outline-none placeholder:text-[var(--color-text-muted)]"
               />
-              <kbd className="text-[10px] text-neutral-600 border border-white/10 rounded px-1.5 py-0.5">
+              <kbd className="text-[10px] text-[var(--color-text-muted)] border border-white/10 rounded px-1.5 py-0.5">
                 ESC
               </kbd>
             </div>
@@ -117,7 +127,7 @@ export default function CommandPalette() {
             {/* Items */}
             <div className="max-h-72 overflow-y-auto p-2">
               {filtered.length === 0 && (
-                <p className="text-neutral-600 text-sm text-center py-6">
+                <p className="text-[var(--color-text-muted)] text-sm text-center py-6">
                   No results
                 </p>
               )}
@@ -125,7 +135,7 @@ export default function CommandPalette() {
               {/* Themes */}
               {filtered.some((i) => i.section === "theme") && (
                 <div className="mb-1">
-                  <p className="text-[10px] uppercase text-neutral-600 px-2 py-1 tracking-wider">
+                  <p className="text-[10px] uppercase text-[var(--color-text-muted)] px-2 py-1 tracking-wider">
                     Themes
                   </p>
                   {filtered
@@ -139,8 +149,8 @@ export default function CommandPalette() {
                           onClick={() => handleSelect(item)}
                           className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-left transition-colors ${
                             isActive
-                              ? "bg-white/10 text-white"
-                              : "text-neutral-400 hover:bg-white/5 hover:text-neutral-200"
+                              ? "bg-white/10 text-[var(--color-text-primary)]"
+                              : "text-[var(--color-text-muted)] hover:bg-white/5 hover:text-[var(--color-text-secondary)]"
                           }`}
                         >
                           {/* Color swatches */}
@@ -175,7 +185,7 @@ export default function CommandPalette() {
               {/* Toggles */}
               {filtered.some((i) => i.section === "toggle") && (
                 <div>
-                  <p className="text-[10px] uppercase text-neutral-600 px-2 py-1 tracking-wider">
+                  <p className="text-[10px] uppercase text-[var(--color-text-muted)] px-2 py-1 tracking-wider">
                     Interactions
                   </p>
                   {filtered
@@ -187,17 +197,17 @@ export default function CommandPalette() {
                         <button
                           key={item.id}
                           onClick={() => handleSelect(item)}
-                          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-left text-neutral-400 hover:bg-white/5 hover:text-neutral-200 transition-colors"
+                          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-left text-[var(--color-text-muted)] hover:bg-white/5 hover:text-[var(--color-text-secondary)] transition-colors"
                         >
                           {isOn ? (
                             <FiToggleRight className="w-4 h-4 text-green-400" />
                           ) : (
-                            <FiToggleLeft className="w-4 h-4 text-neutral-600" />
+                            <FiToggleLeft className="w-4 h-4 text-[var(--color-text-muted)]" />
                           )}
                           <span>{item.label}</span>
                           <span
                             className={`ml-auto text-[10px] ${
-                              isOn ? "text-green-400" : "text-neutral-600"
+                              isOn ? "text-green-400" : "text-[var(--color-text-muted)]"
                             }`}
                           >
                             {isOn ? "ON" : "OFF"}

@@ -11,6 +11,7 @@ const COMMANDS: Record<string, string | string[]> = {
     "  skills      — Technical skills",
     "  projects    — Project list",
     "  experience  — Work history",
+    "  resume      — Download resume",
     "  contact     — Get in touch",
     "  joke        — Random dev joke",
     "  clear       — Clear terminal",
@@ -18,31 +19,42 @@ const COMMANDS: Record<string, string | string[]> = {
   ],
   whoami: [
     "Yash Chavda",
-    "Software Engineer @ Silver Touch Technologies",
-    "B.E. Information Technology — LD College of Engineering",
-    "Ahmedabad, India",
+    "Software Engineer — AI Systems, Backend Architecture, LLM Applications",
+    "Silver Touch Technologies Ltd. — Ahmedabad",
+    "B.E. Information Technology, LD College of Engineering (GPA: 8.92)",
+    "github.com/yashchavda0",
   ],
   skills: [
-    "Languages:  Python · Java · C++ · C",
-    "Frameworks: React · Next.js · Node.js · Express · NumPy",
-    "Databases:  PostgreSQL · MySQL · MongoDB · GraphQL",
-    "Core:       DSA · Algorithms · OOP · DBMS",
+    "Languages:   Python · Java · C++ · C",
+    "Frameworks:  React · Next.js · Node.js · FastAPI · Express",
+    "Databases:   PostgreSQL · MongoDB · MySQL · Milvus",
+    "AI/ML:       LLMs · RAG · NLP · OCR · Multi-Agent Systems",
+    "Tools:       Docker · Linux · Git · GraphQL",
   ],
   projects: [
-    "1. Imaginify — AI-powered image SaaS (Next.js, Stripe, Cloudinary)",
-    "2. Visionary Vest — Creator investment platform (MERN)",
-    "3. Document Processing — OCR/NLP pipeline (Python, FastAPI)",
+    "1. LLM Multi-Agent Orchestration — Production AI system (Python, FastAPI, Milvus)",
+    "2. Imaginify — AI-powered image SaaS (Next.js, Stripe, Cloudinary)",
+    "3. Visionary Vest — Creator investment platform (MERN)",
+    "4. Document Processing — OCR/NLP pipeline (Python, FastAPI)",
   ],
   experience: [
-    "Silver Touch Technologies — Software Engineer",
-    "  • Built B2B apps with Next.js, Python, GraphQL, PostgreSQL",
-    "  • NLP pipeline achieving 99% tabular accuracy",
-    "  • On-premise OCR for government & defense",
+    "Silver Touch Technologies — Software Engineer (2024–Present)",
+    "  • LLM multi-agent orchestration — 40% fewer routing errors",
+    "  • NL→SQL via RAG — 70% SQL dependency cut, sub-2s latency",
+    "  • Workflow automation engine — 50% config effort reduction",
+    "  • OCR/NLP pipeline — 99% tabular accuracy",
+    "  • Docker/Linux deployments — 99%+ uptime",
+  ],
+  resume: [
+    "📄 Download Resume:",
+    "  /Yash_Chavda_CV.pdf",
+    "  Or visit the Contact section for the download link.",
   ],
   contact: [
     "Email:    yashchavda2004@gmail.com",
     "Phone:    +91 70467 83983",
     "GitHub:   github.com/yashchavda0",
+    "LinkedIn: linkedin.com/in/yashchavda",
     "Location: Ahmedabad, India",
   ],
 };
@@ -180,7 +192,7 @@ export default function EasterEggTerminal() {
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
               </div>
-              <span className="text-neutral-500 text-xs font-mono ml-2">
+              <span className="text-[var(--color-text-muted)] text-xs font-mono ml-2">
                 yash@portfolio ~ %
               </span>
             </div>
@@ -202,12 +214,12 @@ export default function EasterEggTerminal() {
                 key={line.id}
                 className={
                   line.type === "input"
-                    ? "text-neutral-300"
+                    ? "text-[var(--color-text-secondary)]"
                     : line.type === "error"
                     ? "text-red-400"
                     : line.type === "success"
                     ? "text-green-400"
-                    : "text-neutral-500"
+                    : "text-[var(--color-text-muted)]"
                 }
               >
                 {line.text}
@@ -225,7 +237,7 @@ export default function EasterEggTerminal() {
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-1 bg-transparent text-neutral-200 text-sm font-mono outline-none placeholder:text-neutral-700"
+              className="flex-1 bg-transparent text-[var(--color-text-secondary)] text-sm font-mono outline-none placeholder:text-[var(--color-text-muted)]"
               placeholder="Type a command..."
               autoFocus
             />
