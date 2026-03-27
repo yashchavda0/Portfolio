@@ -19,16 +19,6 @@ const paletteItems: PaletteItem[] = [
   { id: "t2", label: "Theme: Obsidian + Violet + Amber", section: "theme", themeKey: "obsidian-violet" },
   { id: "t3", label: "Theme: Noir + Cyan + Gold", section: "theme", themeKey: "noir-cyan" },
   { id: "t4", label: "Theme: Midnight + Indigo + Peach", section: "theme", themeKey: "midnight-indigo" },
-  // Light Pastel Themes
-  { id: "t5", label: "Theme: Lavender Dream (Light)", section: "theme", themeKey: "lavender-dream" },
-  { id: "t6", label: "Theme: Peach Sky (Light)", section: "theme", themeKey: "peach-sky" },
-  { id: "t7", label: "Theme: Rose Mint (Light)", section: "theme", themeKey: "rose-mint" },
-  { id: "t8", label: "Theme: Lilac Honey (Light)", section: "theme", themeKey: "lilac-honey" },
-  // Dark Dust Themes
-  { id: "t9", label: "Theme: Charcoal Ash (Dark)", section: "theme", themeKey: "charcoal-ash" },
-  { id: "t10", label: "Theme: Midnight Sage (Dark)", section: "theme", themeKey: "midnight-sage" },
-  { id: "t11", label: "Theme: Forest Fog (Dark)", section: "theme", themeKey: "forest-fog" },
-  { id: "t12", label: "Theme: Ocean Haze (Dark)", section: "theme", themeKey: "ocean-haze" },
   // Toggles
   { id: "c1", label: "Toggle: Cursor Trail", section: "toggle" },
   { id: "c2", label: "Toggle: Encrypted Name", section: "toggle" },
