@@ -133,7 +133,7 @@ export default function Hero() {
             },
             {
               icon: <FiLinkedin className="w-5 h-5" />,
-              href: "https://linkedin.com/in/yashchavda",
+              href: "https://www.linkedin.com/in/yash-chavda-9044b6222",
               label: "LinkedIn",
             },
             {
