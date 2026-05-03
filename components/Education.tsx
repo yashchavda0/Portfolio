@@ -139,7 +139,7 @@ export default function Education() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="relative overflow-hidden rounded-xl border border-white/5 bg-white/[0.02] p-5 group hover:border-white/10 transition-all"
+                  className="relative overflow-hidden rounded-xl border border-white/[0.06] bg-transparent backdrop-blur-[2px] p-5 group hover:border-white/10 transition-all"
                 >
                   {/* Sparkles on hover */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">

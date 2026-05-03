@@ -100,3 +100,24 @@
     transform: translate(calc(-50% - 0.5rem));
   }
 }
+
+/* Ambient orb animations */
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(40px, -30px) scale(1.08); }
+  66%       { transform: translate(-30px, 20px) scale(0.95); }
+}
+@keyframes orbFloatReverse {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(-50px, 30px) scale(1.05); }
+  66%       { transform: translate(30px, -20px) scale(0.97); }
+}
+@keyframes orbFloatSlow {
+  0%, 100% { transform: translateX(-50%) scaleX(1); }
+  50%       { transform: translateX(-50%) scaleX(1.15); }
+}
+
+.ambient-orb       { animation: orbFloat        18s ease-in-out infinite; }
+.ambient-orb-reverse { animation: orbFloatReverse 22s ease-in-out infinite; }
+.ambient-orb-slow  { animation: orbFloatSlow    28s ease-in-out infinite; }
+

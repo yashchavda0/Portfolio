@@ -120,7 +120,7 @@ export default function Contact() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="rounded-xl border border-white/5 bg-white/[0.02] p-5 mb-10"
+          className="rounded-xl border border-white/[0.06] bg-transparent backdrop-blur-[2px] p-5 mb-10"
         >
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">

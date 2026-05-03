@@ -80,7 +80,7 @@ export const InfiniteMovingCards = ({
       >
         {items.map((item, idx) => (
           <li
-            className="w-[120px] max-w-full relative rounded-xl border border-white/[0.05] bg-white/[0.02] flex-shrink-0 px-4 py-3 flex items-center gap-2"
+            className="w-[120px] max-w-full relative rounded-xl border border-white/[0.06] bg-transparent flex-shrink-0 px-4 py-3 flex items-center gap-2"
             key={item.name + idx}
           >
             {item.icon && <span className="text-lg">{item.icon}</span>}

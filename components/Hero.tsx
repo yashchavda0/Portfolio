@@ -17,7 +17,7 @@ export default function Hero() {
   ];
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div className="relative min-h-screen flex items-center justify-center">
       {/* Spotlights */}
       <Spotlight
         className="-top-40 left-0 md:left-60 md:-top-20"
@@ -26,16 +26,6 @@ export default function Hero() {
       <Spotlight
         className="top-10 right-0 md:right-60 md:-top-10"
         fill="var(--color-secondary)"
-      />
-
-      {/* Dot Grid Background */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, currentColor 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }}
       />
 
       {/* Content */}

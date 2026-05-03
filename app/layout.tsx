@@ -27,6 +27,10 @@ export const metadata: Metadata = {
     "React",
     "Portfolio",
   ],
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

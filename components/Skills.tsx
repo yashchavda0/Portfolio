@@ -240,7 +240,7 @@ function SkillGrid({ filteredSkills }: { filteredSkills: Skill[] }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: i * 0.03 }}
-          className="relative overflow-hidden rounded-xl border border-white/5 bg-white/[0.02] p-4 group hover:border-white/10 transition-colors"
+          className="relative overflow-hidden rounded-xl border border-white/[0.06] bg-transparent backdrop-blur-[2px] p-4 group hover:border-white/10 transition-colors"
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-[var(--color-text-secondary)] font-medium">

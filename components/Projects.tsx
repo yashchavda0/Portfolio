@@ -2,10 +2,9 @@
 
 import { motion } from "framer-motion";
 import { ExpandableCard } from "@/components/ui/expandable-card";
-import { LampEffect } from "@/components/ui/lamp-effect";
 import { FiGithub } from "react-icons/fi";
 import { MovingBorderButton } from "@/components/ui/moving-border";
-import { SiNextdotjs, SiStripe, SiCloudinary, SiNodedotjs, SiMongodb, SiExpress, SiFastapi, SiPostgresql, SiPython } from "react-icons/si";
+import { SiNextdotjs, SiStripe, SiCloudinary, SiNodedotjs, SiMongodb, SiExpress, SiFastapi, SiPostgresql, SiPython, SiDocker } from "react-icons/si";
 import { FaReact } from "react-icons/fa";
 
 const projects = [
@@ -13,15 +12,16 @@ const projects = [
     title: "LLM Multi-Agent Orchestration",
     description:
       "Production AI system with dynamic task routing, NL→SQL, and workflow automation.",
-    src: "placeholder",
+    category: "AI / LLM",
+    stat: "70% less manual SQL",
     ctaText: "View on GitHub",
     ctaLink: "https://github.com/yashchavda0",
     tags: ["Python", "FastAPI", "LLMs", "RAG", "Milvus"],
     tagsWithIcons: [
       { name: "Python", icon: SiPython },
       { name: "FastAPI", icon: SiFastapi },
-      { name: "LLMs", icon: SiFastapi },
-      { name: "RAG", icon: SiFastapi },
+      { name: "Milvus", icon: SiPostgresql },
+      { name: "LLMs", icon: SiPython },
     ],
     content: (
       <div className="space-y-3">
@@ -58,7 +58,8 @@ const projects = [
     title: "Imaginify",
     description:
       "AI-powered image SaaS platform with secure payments and advanced search.",
-    src: "placeholder",
+    category: "SaaS / AI",
+    stat: "Credit-based payments",
     ctaText: "View on GitHub",
     ctaLink: "https://github.com/yashchavda0",
     tags: ["Next.js", "React", "Stripe", "Cloudinary"],
@@ -104,7 +105,8 @@ const projects = [
     title: "Visionary Vest",
     description:
       "Platform enabling users to invest in content creators and share success.",
-    src: "placeholder",
+    category: "Fintech / Web",
+    stat: "Real-time portfolios",
     ctaText: "View on GitHub",
     ctaLink: "https://github.com/yashchavda0",
     tags: ["React", "Node.js", "MongoDB", "Express"],
@@ -150,14 +152,15 @@ const projects = [
     title: "Document Processing Platform",
     description:
       "Enterprise-grade OCR/NLP pipeline for structured data extraction.",
-    src: "placeholder",
+    category: "Enterprise / NLP",
+    stat: "99% tabular accuracy",
     ctaText: "View on GitHub",
     ctaLink: "https://github.com/yashchavda0",
     tags: ["Python", "FastAPI", "Docker", "PostgreSQL"],
     tagsWithIcons: [
       { name: "Python", icon: SiPython },
       { name: "FastAPI", icon: SiFastapi },
-      { name: "Docker", icon: SiPostgresql },
+      { name: "Docker", icon: SiDocker },
       { name: "PostgreSQL", icon: SiPostgresql },
     ],
     content: (
@@ -198,29 +201,35 @@ export default function Projects() {
   return (
     <div className="py-24 px-4">
       <div className="max-w-5xl mx-auto">
-        {/* Lamp Effect Section Header */}
-        <LampEffect>
-          <motion.h2
-            initial={{ opacity: 0.5, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8, ease: "easeInOut" }}
-            className="text-3xl md:text-5xl font-bold text-center mb-2"
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center mb-14"
+        >
+          <span
+            className="inline-block text-xs font-mono tracking-widest uppercase mb-4 px-3 py-1 rounded-full border"
+            style={{
+              color: "var(--color-primary)",
+              borderColor: "rgba(var(--color-primary-rgb),0.4)",
+              background: "rgba(var(--color-primary-rgb),0.08)",
+            }}
           >
+            Portfolio
+          </span>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
             What I&apos;ve{" "}
             <span style={{ color: "var(--color-primary)" }}>Built</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-            className="text-neutral-500 text-center max-w-md"
-          >
-            Click any card to explore the details
-          </motion.p>
-        </LampEffect>
+          </h2>
+          <p className="text-neutral-500 text-base max-w-md mx-auto">
+            A selection of projects spanning AI systems, full-stack apps, and enterprise tooling.
+          </p>
+        </motion.div>
 
         {/* Project Cards */}
-        <div className="-mt-20">
+        <div>
           <ExpandableCard cards={projects} />
         </div>
 

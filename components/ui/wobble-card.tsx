@@ -55,7 +55,7 @@ export const WobbleCard = ({
     >
       <div
         className={cn(
-          "rounded-2xl overflow-hidden bg-white/[0.02] border border-white/[0.05] p-6",
+          "rounded-2xl overflow-hidden bg-transparent border border-white/[0.06] hover:border-white/[0.10] p-6 backdrop-blur-[2px]",
           className
         )}
         style={{ transformStyle: "preserve-3d" }}
