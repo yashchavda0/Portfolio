@@ -1,10 +1,13 @@
 "use client";
 
-import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
-import { useRef, useEffect, useState, useCallback } from "react";
-import { useConfig } from "@/components/ConfigProvider";
+import { motion } from "framer-motion";
+import { useRef, useState, Suspense } from "react";
+import dynamic from "next/dynamic";
 
-/* ─── Skill data ─── */
+const SkillCloud3D = dynamic(() => import("./SkillCloud3D"), { ssr: false });
+
+/* ─── Data ─── */
+
 interface Skill {
   name: string;
   level: number;
@@ -12,342 +15,220 @@ interface Skill {
 }
 
 const skills: Skill[] = [
-  // Languages
   { name: "Python", level: 90, category: "Languages" },
   { name: "Java", level: 85, category: "Languages" },
   { name: "C++", level: 80, category: "Languages" },
   { name: "C", level: 75, category: "Languages" },
-  // Frameworks
   { name: "React", level: 90, category: "Frameworks" },
   { name: "Next.js", level: 85, category: "Frameworks" },
   { name: "FastAPI", level: 85, category: "Frameworks" },
   { name: "Node.js", level: 85, category: "Frameworks" },
   { name: "Express", level: 80, category: "Frameworks" },
-  // Databases
   { name: "PostgreSQL", level: 85, category: "Databases" },
   { name: "Milvus", level: 80, category: "Databases" },
   { name: "MongoDB", level: 75, category: "Databases" },
   { name: "MySQL", level: 80, category: "Databases" },
-  // AI/ML
   { name: "LLMs", level: 85, category: "AI/ML" },
   { name: "RAG", level: 85, category: "AI/ML" },
   { name: "NLP", level: 80, category: "AI/ML" },
   { name: "OCR", level: 80, category: "AI/ML" },
-  // Tools
   { name: "Docker", level: 85, category: "Tools" },
   { name: "Linux", level: 80, category: "Tools" },
   { name: "Git", level: 90, category: "Tools" },
   { name: "GraphQL", level: 80, category: "Tools" },
-  // Core
   { name: "DSA", level: 90, category: "Core" },
   { name: "Algorithms", level: 85, category: "Core" },
   { name: "OOP", level: 90, category: "Core" },
   { name: "DBMS", level: 85, category: "Core" },
 ];
 
-const categories = ["All", "Languages", "Frameworks", "Databases", "AI/ML", "Tools", "Core"];
+const categoryDefs = [
+  { name: "Languages", color: "#dc2626" },
+  { name: "Frameworks", color: "#ea580c" },
+  { name: "AI/ML", color: "#dc2626" },
+  { name: "Databases", color: "#b45309" },
+  { name: "Tools", color: "#57534e" },
+  { name: "Core", color: "#1a1715" },
+];
 
-const categoryColors: Record<string, string> = {
-  Languages: "var(--color-primary)",
-  Frameworks: "var(--color-secondary)",
-  Databases: "var(--color-primary)",
-  "AI/ML": "var(--color-secondary)",
-  Tools: "var(--color-primary)",
-  Core: "var(--color-secondary)",
-};
+/* ─── Category Grid view ─── */
 
-/* ─── Generate constellation positions in a circular layout ─── */
-function generatePositions(count: number, width: number, height: number) {
-  const positions: { x: number; y: number }[] = [];
-  const cx = width / 2;
-  const cy = height / 2;
-  const maxRadius = Math.min(width, height) * 0.4;
-
-  for (let i = 0; i < count; i++) {
-    const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
-    const radiusJitter = maxRadius * (0.7 + Math.random() * 0.3);
-    positions.push({
-      x: cx + Math.cos(angle) * radiusJitter,
-      y: cy + Math.sin(angle) * radiusJitter,
-    });
-  }
-  return positions;
-}
-
-/* ─── Constellation (SVG interactive) ─── */
-function Constellation({
-  filteredSkills,
-}: {
-  filteredSkills: Skill[];
-}) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [size, setSize] = useState({ w: 700, h: 500 });
-  const [hovered, setHovered] = useState<number | null>(null);
-  const mouseX = useMotionValue(size.w / 2);
-  const mouseY = useMotionValue(size.h / 2);
-  const springX = useSpring(mouseX, { stiffness: 50, damping: 20 });
-  const springY = useSpring(mouseY, { stiffness: 50, damping: 20 });
-
-  useEffect(() => {
-    const updateSize = () => {
-      if (svgRef.current) {
-        const rect = svgRef.current.getBoundingClientRect();
-        setSize({ w: rect.width, h: Math.max(rect.height, 450) });
-      }
-    };
-    updateSize();
-    window.addEventListener("resize", updateSize);
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
-
-  const positions = generatePositions(filteredSkills.length, size.w, size.h);
-
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<SVGSVGElement>) => {
-      const rect = svgRef.current?.getBoundingClientRect();
-      if (rect) {
-        mouseX.set(e.clientX - rect.left);
-        mouseY.set(e.clientY - rect.top);
-      }
-    },
-    [mouseX, mouseY]
-  );
-
-  /* Build connection lines — connect each node to its 2 nearest neighbours */
-  const lines: { x1: number; y1: number; x2: number; y2: number }[] = [];
-  positions.forEach((p, i) => {
-    const dists = positions
-      .map((q, j) => ({
-        j,
-        d: Math.hypot(p.x - q.x, p.y - q.y),
-      }))
-      .filter((d) => d.j !== i)
-      .sort((a, b) => a.d - b.d);
-    dists.slice(0, 2).forEach((d) => {
-      const key1 = `${Math.min(i, d.j)}-${Math.max(i, d.j)}`;
-      if (!lines.find((l) => `${positions.indexOf({ x: l.x1, y: l.y1 })}-${positions.indexOf({ x: l.x2, y: l.y2 })}` === key1)) {
-        lines.push({ x1: p.x, y1: p.y, x2: positions[d.j].x, y2: positions[d.j].y });
-      }
-    });
-  });
+function CategoryGrid() {
+  const [hovered, setHovered] = useState<string | null>(null);
 
   return (
-    <svg
-      ref={svgRef}
-      className="w-full h-[450px] md:h-[500px]"
-      onMouseMove={handleMouseMove}
-    >
-      {/* Connection lines */}
-      {lines.map((l, i) => (
-        <motion.line
-          key={`line-${i}`}
-          x1={l.x1}
-          y1={l.y1}
-          x2={l.x2}
-          y2={l.y2}
-          stroke="var(--color-primary)"
-          strokeOpacity={0.1}
-          strokeWidth={1}
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1.5, delay: i * 0.02 }}
-        />
-      ))}
-
-      {/* Skill nodes */}
-      {filteredSkills.map((skill, i) => {
-        const pos = positions[i];
-        if (!pos) return null;
-        const radius = 6 + (skill.level / 100) * 14;
-        const isHovered = hovered === i;
-        const color = categoryColors[skill.category] || "var(--color-primary)";
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-cream-border">
+      {categoryDefs.map(({ name, color }, ci) => {
+        const catSkills = skills
+          .filter((s) => s.category === name)
+          .sort((a, b) => b.level - a.level);
 
         return (
-          <g
-            key={skill.name}
-            onMouseEnter={() => setHovered(i)}
-            onMouseLeave={() => setHovered(null)}
-            style={{ cursor: "pointer" }}
+          <motion.div
+            key={name}
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: ci * 0.07 }}
+            className="bg-cream-surface p-5 md:p-7"
           >
-            {/* Glow */}
-            <motion.circle
-              cx={pos.x}
-              cy={pos.y}
-              r={radius + 8}
-              fill={color}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isHovered ? 0.15 : 0 }}
-              transition={{ duration: 0.2 }}
-            />
-            {/* Main node */}
-            <motion.circle
-              cx={pos.x}
-              cy={pos.y}
-              r={radius}
-              fill={color}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{
-                scale: isHovered ? 1.3 : 1,
-                opacity: isHovered ? 1 : 0.7,
-              }}
-              transition={{
-                scale: { type: "spring", stiffness: 300 },
-                opacity: { duration: 0.3 },
-                default: { duration: 0.6, delay: i * 0.04 },
-              }}
-            />
-            {/* Label */}
-            <motion.text
-              x={pos.x}
-              y={pos.y + radius + 16}
-              textAnchor="middle"
-              fill="currentColor"
-              className="text-[10px] md:text-xs fill-neutral-400"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isHovered ? 1 : 0.5 }}
+            {/* Category label */}
+            <p
+              className="font-mono text-[9px] tracking-[3px] uppercase mb-4 md:mb-5"
+              style={{ color }}
             >
-              {skill.name}
-            </motion.text>
-            {/* Level badge on hover */}
-            {isHovered && (
-              <motion.text
-                x={pos.x}
-                y={pos.y + 4}
-                textAnchor="middle"
-                fill="white"
-                className="text-[10px] font-bold"
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                {skill.level}%
-              </motion.text>
-            )}
-          </g>
+              {name}
+            </p>
+
+            {/* Skills — varying serif sizes */}
+            <div className="flex flex-col gap-1 md:gap-1.5">
+              {catSkills.map((skill) => {
+                const size = 0.88 + ((skill.level - 60) / 40) * 0.78;
+                const isHov = hovered === skill.name;
+                return (
+                  <span
+                    key={skill.name}
+                    onMouseEnter={() => setHovered(skill.name)}
+                    onMouseLeave={() => setHovered(null)}
+                    className="font-serif font-semibold leading-tight cursor-default select-none transition-all duration-150"
+                    style={{
+                      fontSize: `${size}rem`,
+                      color: isHov ? color : "#292524",
+                      opacity: isHov ? 1 : 0.82,
+                      letterSpacing: "-0.015em",
+                    }}
+                    title={`${skill.name} — ${skill.level}%`}
+                  >
+                    {skill.name}
+                  </span>
+                );
+              })}
+            </div>
+          </motion.div>
         );
       })}
-    </svg>
+    </div>
   );
 }
 
-/* ─── Grid fallback ─── */
-function SkillGrid({ filteredSkills }: { filteredSkills: Skill[] }) {
+/* ─── Word Cloud view ─── */
+
+function hexAlpha(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function WordCloud() {
+  const [hovered, setHovered] = useState<string | null>(null);
+  const sorted = [...skills].sort((a, b) => b.level - a.level);
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-      {filteredSkills.map((skill, i) => (
-        <motion.div
-          key={skill.name}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: i * 0.03 }}
-          className="relative overflow-hidden rounded-xl border border-white/[0.06] bg-transparent backdrop-blur-[2px] p-4 group hover:border-white/10 transition-colors"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-[var(--color-text-secondary)] font-medium">
-              {skill.name}
-            </span>
-            <span
-              className="text-xs font-mono"
-              style={{ color: categoryColors[skill.category] }}
-            >
-              {skill.level}%
-            </span>
-          </div>
-          {/* Progress bar */}
-          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full rounded-full"
-              style={{ backgroundColor: categoryColors[skill.category] }}
-              initial={{ width: 0 }}
-              whileInView={{ width: `${skill.level}%` }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, delay: i * 0.05 }}
-            />
-          </div>
-          <span className="text-[10px] text-[var(--color-text-muted)] mt-1 block">
-            {skill.category}
+    <div className="p-8 md:p-14 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 min-h-[280px] md:min-h-[380px]">
+      {sorted.map((skill) => {
+        const cat = categoryDefs.find((c) => c.name === skill.category);
+        const baseColor = cat?.color ?? "#1a1715";
+        const size = 0.55 + ((skill.level - 60) / 40) * 2.2;
+        const isHov = hovered === skill.name;
+        const color = isHov
+          ? baseColor
+          : hovered
+          ? hexAlpha(baseColor, 0.22)
+          : hexAlpha(baseColor, 0.65);
+        return (
+          <span
+            key={skill.name}
+            onMouseEnter={() => setHovered(skill.name)}
+            onMouseLeave={() => setHovered(null)}
+            className="font-serif font-semibold leading-tight cursor-default select-none transition-all duration-200"
+            style={{
+              fontSize: `${size}rem`,
+              color,
+              letterSpacing: "-0.015em",
+            }}
+            title={`${skill.name} · ${skill.category}`}
+          >
+            {skill.name}
           </span>
-        </motion.div>
-      ))}
+        );
+      })}
     </div>
   );
 }
 
 /* ─── Main component ─── */
+
 export default function Skills() {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
-  const [activeCategory, setActiveCategory] = useState("All");
-  const { flags } = useConfig();
-
-  const filteredSkills =
-    activeCategory === "All"
-      ? skills
-      : skills.filter((s) => s.category === activeCategory);
+  const [view, setView] = useState<"cloud" | "3d">("cloud");
 
   return (
-    <div className="py-24 px-4" ref={sectionRef}>
+    <div className="py-16 md:py-32 px-6 md:px-16 lg:px-24 border-t border-stone-100" ref={sectionRef}>
       <div className="max-w-5xl mx-auto">
-        {/* Section Header */}
+
+        {/* Section header + toggle */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8 md:mb-12"
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            Technical{" "}
-            <span style={{ color: "var(--color-primary)" }}>Arsenal</span>
-          </h2>
-          <p className="text-[var(--color-text-muted)] max-w-md mx-auto">
-            Technologies and tools I use to bring ideas to life
-          </p>
+          <div>
+            <p className="section-label mb-4">Skills</p>
+            <h2 className="font-serif text-3xl md:text-[2.6rem] font-bold text-stone-900 leading-tight tracking-tight">
+              What I build with<span className="ember-text">.</span>
+            </h2>
+          </div>
+
+          {/* Apple-style segmented toggle */}
+          <div className="flex items-center self-start md:self-auto shrink-0 p-1 rounded-full bg-stone-100 border border-stone-200">
+            {([['cloud', 'Word Cloud'], ['3d', '3D Orbit']] as const).map(([v, label]) => (
+              <button
+                key={v}
+                onClick={() => setView(v)}
+                className={`px-4 py-1.5 rounded-full text-xs font-mono tracking-wide transition-all duration-200 ${
+                  view === v
+                    ? "bg-white text-stone-900 shadow-sm border border-stone-200"
+                    : "text-stone-500 hover:text-stone-700"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </motion.div>
 
-        {/* Category filter pills */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {categories.map((cat) => (
-            <motion.button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-1.5 rounded-full text-sm transition-all border ${
-                activeCategory === cat
-                  ? "border-white/20 bg-white/10 text-[var(--color-text-primary)]"
-                  : "border-white/5 text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] hover:border-white/10"
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {cat}
-            </motion.button>
-          ))}
+        {/* Content panel */}
+        <div className="rounded-2xl border border-cream-border overflow-hidden">
+          {view === 'cloud' ? (
+            <WordCloud />
+          ) : (
+            <Suspense fallback={
+              <div className="h-[450px] md:h-[550px] flex items-center justify-center bg-cream-surface">
+                <span className="font-mono text-[10px] tracking-[4px] uppercase text-stone-400 animate-pulse">Loading 3D view…</span>
+              </div>
+            }>
+              <SkillCloud3D skills={skills} activeCategory="All" />
+            </Suspense>
+          )}
         </div>
 
-        {/* Constellation or Grid */}
-        {flags.skillConstellation ? (
-          <Constellation filteredSkills={filteredSkills} />
-        ) : (
-          <SkillGrid filteredSkills={filteredSkills} />
-        )}
-
-        {/* Footer note */}
-        <motion.p
+        {/* Category legend */}
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-center text-[var(--color-text-muted)] text-sm mt-8"
+          className="flex flex-wrap items-center gap-4 md:gap-6 mt-6"
         >
-          Actively building with{" "}
-          <span style={{ color: "var(--color-primary)" }}>
-            LLMs
-          </span>{" "}
-          ·{" "}
-          <span style={{ color: "var(--color-secondary)" }}>RAG</span>
-          {" "}·{" "}
-          <span style={{ color: "var(--color-primary)" }}>Vector Databases</span>
-          {" "}·{" "}
-          <span style={{ color: "var(--color-secondary)" }}>Distributed Systems</span>
-        </motion.p>
+          {categoryDefs.map(({ name, color }) => (
+            <span key={name} className="flex items-center gap-1.5 text-xs text-stone-400">
+              <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} />
+              {name}
+            </span>
+          ))}
+        </motion.div>
+
       </div>
     </div>
   );

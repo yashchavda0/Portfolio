@@ -9,39 +9,38 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        cream: "#faf8f5",
+        "cream-surface": "#f2efe9",
+        "cream-border": "#e8e4de",
+        ember: {
+          red: "#dc2626",
+          orange: "#ea580c",
+          amber: "#d97706",
+        },
+      },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        mono: ["Fira Code", "monospace"],
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        serif: ["Georgia", "serif"],
+        mono: ["var(--font-mono)", "Fira Code", "monospace"],
       },
       animation: {
+        "fade-in": "fadeIn 0.6s ease-out forwards",
+        "slide-up": "slideUp 0.5s ease-out",
         float: "float 6s ease-in-out infinite",
-        "float-delayed": "float 6s ease-in-out 3s infinite",
-        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
-        "slide-up": "slide-up 0.5s ease-out",
-        scroll:
-          "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
       },
       keyframes: {
-        float: {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-20px)" },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
-        "pulse-glow": {
-          "0%, 100%": {
-            opacity: "1",
-            boxShadow: "0 0 20px rgba(var(--color-primary-rgb), 0.3)",
-          },
-          "50%": {
-            opacity: "0.8",
-            boxShadow: "0 0 40px rgba(var(--color-primary-rgb), 0.6)",
-          },
-        },
-        "slide-up": {
-          "0%": { transform: "translateY(30px)", opacity: "0" },
+        slideUp: {
+          "0%": { transform: "translateY(20px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
         },
-        scroll: {
-          to: { transform: "translate(calc(-50% - 0.5rem))" },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
         },
       },
     },
