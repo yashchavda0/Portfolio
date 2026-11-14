@@ -1,224 +1,170 @@
-'use client';
+"use client";
+import { motion } from "framer-motion";
+import { FiGithub, FiLinkedin, FiMail, FiDownload, FiArrowUpRight, FiMapPin } from "react-icons/fi";
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { FiArrowDown, FiGithub, FiLinkedin, FiMail, FiCode, FiCpu, FiDatabase } from 'react-icons/fi';
-import { useEffect, useState } from 'react';
-
-const roles = ['Software Engineer', 'Full Stack Developer', 'AI/ML Enthusiast'];
-
-const floatingIcons = [
-  { icon: FiCode, delay: 0, x: -100, y: -50 },
-  { icon: FiCpu, delay: 0.5, x: 100, y: -80 },
-  { icon: FiDatabase, delay: 1, x: -80, y: 60 },
-  { icon: FiCode, delay: 1.5, x: 120, y: 40 },
-];
+const rise = {
+  hidden: { opacity: 0, y: 28 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.72, delay: i * 0.11, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
 
 export default function Hero() {
-  const [currentRole, setCurrentRole] = useState(0);
-  const [displayText, setDisplayText] = useState('');
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    const role = roles[currentRole];
-
-    const typeWriter = () => {
-      let i = 0;
-      setDisplayText('');
-
-      const type = () => {
-        if (i < role.length) {
-          setDisplayText(role.slice(0, i + 1));
-          i++;
-          timeout = setTimeout(type, 100);
-        } else {
-          timeout = setTimeout(() => {
-            setCurrentRole((prev) => (prev + 1) % roles.length);
-          }, 2000);
-        }
-      };
-
-      type();
-    };
-
-    typeWriter();
-
-    return () => clearTimeout(timeout);
-  }, [currentRole]);
-
-  const scrollToAbout = () => {
-    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <section
-      id="hero"
-      className="min-h-screen flex items-center justify-center relative overflow-hidden px-4"
-    >
-      {/* Animated background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle, #64ffda 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-        }} />
+    <div className="relative min-h-screen flex flex-col px-6 md:px-16 lg:px-24 pt-6 md:pt-10 overflow-hidden">
+
+      {/* Background watermark monogram */}
+      <div className="absolute right-[-2%] bottom-[6%] select-none pointer-events-none" aria-hidden>
+        <span
+          className="font-serif font-bold"
+          style={{
+            fontSize: "clamp(11rem, 32vw, 28rem)",
+            lineHeight: 1,
+            letterSpacing: "-0.04em",
+            color: "rgba(26,23,21,0.028)",
+          }}
+        >
+          YC
+        </span>
       </div>
 
-      {/* Floating tech icons */}
-      <div className="absolute inset-0 pointer-events-none hidden md:block">
-        {floatingIcons.map((item, index) => {
-          const Icon = item.icon;
-          return (
-            <motion.div
-              key={index}
-              className="absolute text-teal-400/30"
-              style={{
-                left: '50%',
-                top: '50%',
-                x: item.x,
-                y: item.y,
-              }}
-              animate={{
-                y: item.y + Math.sin(Date.now() / 1000 + index) * 20,
-                rotate: [0, 10, -10, 0],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                delay: item.delay,
-              }}
-            >
-              <Icon size={40} />
-            </motion.div>
-          );
-        })}
-      </div>
-
+      {/* Top strip — badge + social icons */}
       <motion.div
-        className="text-center z-10 max-w-4xl mx-auto"
-        style={{ y: y1, opacity }}
+        custom={0}
+        variants={rise}
+        initial="hidden"
+        animate="visible"
+        className="flex items-center justify-between mt-4 md:mt-6"
       >
-        {/* Greeting */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-teal-400 text-lg md:text-xl mb-4 font-mono"
-        >
-          Hi, my name is
-        </motion.p>
+        <div className="flex items-center gap-3">
+          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[10px] font-mono tracking-widest uppercase border border-ember-red/20 text-ember-red bg-ember-red/[0.04]">
+            <span className="w-1.5 h-1.5 rounded-full bg-ember-red animate-pulse" />
+            Available for hire
+          </span>
+          <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-mono tracking-widest uppercase border border-stone-200 text-stone-500 bg-white">
+            <FiMapPin className="w-3 h-3 text-stone-400" /> Ahmedabad, India
+          </span>
+        </div>
+        <div className="flex items-center gap-7">
+          {[
+            { icon: FiGithub, href: "https://github.com/yashchavda0", label: "GitHub" },
+            { icon: FiLinkedin, href: "https://www.linkedin.com/in/yash-chavda-9044b6222", label: "LinkedIn" },
+            { icon: FiMail, href: "mailto:yashchavda2004@gmail.com", label: "Email" },
+          ].map(({ icon: Icon, href, label }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="text-stone-400 hover:text-stone-800 transition-colors duration-200"
+            >
+              <Icon className="w-[18px] h-[18px]" />
+            </a>
+          ))}
+        </div>
+      </motion.div>
 
-        {/* Name */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold text-cream-100 mb-6"
+      {/* Centre block — index line + name + description + stats */}
+      <div className="flex-1 flex flex-col justify-center py-10 md:py-6">
+
+        {/* Index descriptor */}
+        <motion.div
+          custom={1}
+          variants={rise}
+          initial="hidden"
+          animate="visible"
+          className="flex items-center gap-4 mb-8 md:mb-10"
         >
-          Yash Chavda
+          <span className="font-mono text-[10px] tracking-[4px] uppercase text-stone-400">
+            AI Engineer
+          </span>
+        </motion.div>
+
+        {/* Name — the centrepiece */}
+        <motion.h1
+          custom={2}
+          variants={rise}
+          initial="hidden"
+          animate="visible"
+          className="font-serif font-bold text-stone-900 leading-[0.88] tracking-[-0.03em]"
+          style={{ fontSize: "clamp(4.2rem, 13vw, 10.5rem)" }}
+        >
+          Yash<br />
+          Chavda<span className="ember-text">.</span>
         </motion.h1>
 
-        {/* Typewriter role */}
+        {/* Description row + mini stats */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-2xl md:text-4xl lg:text-5xl text-navy-700 mb-8 h-16 font-mono"
+          custom={3}
+          variants={rise}
+          initial="hidden"
+          animate="visible"
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 md:gap-16 mt-8 md:mt-10"
         >
-          <span className="text-terra-cotta">{displayText}</span>
-          <span className="animate-pulse">|</span>
+          <p className="text-stone-500 text-sm leading-[1.8] max-w-sm">
+            Building enterprise AI systems, multi-agent orchestration,
+            and production-grade backend infrastructure for B2B clients
+            across government and defense sectors.
+          </p>
+
+          {/* Stats strip */}
+          <div className="flex items-end gap-8 md:gap-10 shrink-0">
+            {[
+              { num: "10+", label: "Projects" },
+              { num: "90%", label: "Table Accuracy" },
+              { num: "70%", label: "SQL Saved" },
+            ].map(({ num, label }) => (
+              <div key={label} className="flex flex-col items-center">
+                <span className="font-serif font-bold text-stone-900 text-2xl md:text-3xl leading-none tracking-tight">
+                  {num}
+                </span>
+                <span className="text-[10px] font-mono text-stone-400 tracking-wide mt-1.5 uppercase">
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
         </motion.div>
+      </div>
 
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-lg md:text-xl text-navy-700 max-w-2xl mx-auto mb-12"
-        >
-          Building intelligence, one line at a time. Crafting scalable applications
-          with <span className="text-teal-400">Next.js</span>,{' '}
-          <span className="text-teal-400">Python</span>, and{' '}
-          <span className="text-teal-400">AI/ML</span>.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
-        >
-          <motion.button
-            onClick={scrollToAbout}
-            className="magnetic-btn px-8 py-4 border-2 border-teal-400 text-teal-400 rounded-lg font-medium hover:bg-teal-400/10 transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Explore My Work
-          </motion.button>
-          <motion.a
-            href="https://github.com/yashchavda0"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="magnetic-btn px-8 py-4 bg-teal-400 text-navy-900 rounded-lg font-medium hover:bg-teal-300 transition-colors"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            View GitHub
-          </motion.a>
-        </motion.div>
-
-        {/* Quick Links */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="flex items-center justify-center space-x-8"
-        >
-          <motion.a
-            href="https://github.com/yashchavda0"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-navy-700 hover:text-teal-400 transition-colors"
-            whileHover={{ scale: 1.2, rotate: 5 }}
-          >
-            <FiGithub size={28} />
-          </motion.a>
-          <motion.a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-navy-700 hover:text-teal-400 transition-colors"
-            whileHover={{ scale: 1.2, rotate: 5 }}
-          >
-            <FiLinkedin size={28} />
-          </motion.a>
-          <motion.a
-            href="mailto:yashchavda2004@gmail.com"
-            className="text-navy-700 hover:text-teal-400 transition-colors"
-            whileHover={{ scale: 1.2, rotate: 5 }}
-          >
-            <FiMail size={28} />
-          </motion.a>
-        </motion.div>
-      </motion.div>
-
-      {/* Scroll indicator */}
+      {/* Bottom bar — tag list + CTAs */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.72 }}
+        className="border-t border-stone-200 py-6 md:py-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
       >
-        <button
-          onClick={scrollToAbout}
-          className="text-teal-400 hover:text-teal-300 transition-colors"
-          aria-label="Scroll down"
-        >
-          <FiArrowDown size={32} />
-        </button>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          {["AI Systems", "Backend", "LLMs", "Multi-Agent", "Python", "Next.js"].map((tag, i) => (
+            <span key={tag} className="flex items-center gap-3">
+              {i > 0 && <span className="w-1 h-1 rounded-full bg-stone-300 hidden sm:block" />}
+              <span className="text-xs font-mono text-stone-400 tracking-wide">{tag}</span>
+            </span>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3 shrink-0">
+          <a
+            href="#work"
+            className="group inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium text-white transition-all duration-300 hover:opacity-90 hover:shadow-lg hover:shadow-ember-red/20"
+            style={{ background: "var(--accent-gradient)" }}
+          >
+            View My Work
+            <FiArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </a>
+          <a
+            href="/Yash_Chavda_CV.pdf"
+            download="Yash_Chavda_CV.pdf"
+            className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-full text-sm font-medium text-stone-600 border border-stone-300 hover:border-stone-400 hover:text-stone-800 transition-all duration-300"
+          >
+            <FiDownload className="w-3.5 h-3.5" />
+            Resume
+          </a>
+        </div>
       </motion.div>
-    </section>
+    </div>
   );
 }

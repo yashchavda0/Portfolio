@@ -2,3 +2,5 @@
 /.next
 node_modules
 .next
+.claude
+.superpowers/*

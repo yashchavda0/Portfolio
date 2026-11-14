@@ -1,163 +1,133 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { FiMenu, FiX, FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const navItems = [
-  { name: 'About', href: '#about' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Contact', href: '#contact' },
-];
+const NAV_LINKS = [
+  { label: "About", href: "#about" },
+  { label: "Work", href: "#work" },
+  { label: "Skills", href: "#skills" },
+  { label: "Contact", href: "#contact" },
+] as const;
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 80);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollTo = (href: string) => {
-    setIsOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
+
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      e.preventDefault();
+      setMenuOpen(false);
+      const target = document.querySelector(href);
+      if (target) target.scrollIntoView({ behavior: "smooth" });
+    },
+    []
+  );
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-navy-900/90 backdrop-blur-md shadow-lg' : 'bg-transparent'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <motion.a
-            href="#"
-            className="text-2xl font-bold text-teal-400 font-mono"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            &lt;YC /&gt;
-          </motion.a>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <motion.button
-                key={item.name}
-                onClick={() => scrollTo(item.href)}
-                className="text-cream-100 hover:text-teal-400 transition-colors duration-200 text-sm font-medium"
-                whileHover={{ y: -2 }}
-              >
-                {item.name}
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Social Links - Desktop */}
-          <div className="hidden md:flex items-center space-x-4">
-            <motion.a
-              href="https://github.com/yashchavda0"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-cream-100 hover:text-teal-400 transition-colors"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-            >
-              <FiGithub size={20} />
-            </motion.a>
-            <motion.a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-cream-100 hover:text-teal-400 transition-colors"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-            >
-              <FiLinkedin size={20} />
-            </motion.a>
-            <motion.a
-              href="mailto:yashchavda2004@gmail.com"
-              className="text-cream-100 hover:text-teal-400 transition-colors"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-            >
-              <FiMail size={20} />
-            </motion.a>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-cream-100 p-2"
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-          </motion.button>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
+    <>
+      {/* Desktop floating pill — appears after scrolling past hero */}
       <AnimatePresence>
-        {isOpen && (
+        {scrolled && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-navy-900/95 backdrop-blur-md border-t border-navy-800"
+            key="pill-nav"
+            initial={{ opacity: 0, y: -18, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -18, scale: 0.96 }}
+            transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden md:flex"
+            style={{ width: "680px" }}
           >
-            <div className="px-4 py-6 space-y-4">
-              {navItems.map((item, index) => (
-                <motion.button
-                  key={item.name}
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: index * 0.1 }}
-                  onClick={() => scrollTo(item.href)}
-                  className="block w-full text-left text-cream-100 hover:text-teal-400 transition-colors py-2 text-lg"
-                >
-                  {item.name}
-                </motion.button>
-              ))}
-              <div className="flex items-center space-x-6 pt-4 border-t border-navy-800">
-                <motion.a
-                  href="https://github.com/yashchavda0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cream-100 hover:text-teal-400 transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                >
-                  <FiGithub size={24} />
-                </motion.a>
-                <motion.a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cream-100 hover:text-teal-400 transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                >
-                  <FiLinkedin size={24} />
-                </motion.a>
-                <motion.a
-                  href="mailto:yashchavda2004@gmail.com"
-                  className="text-cream-100 hover:text-teal-400 transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                >
-                  <FiMail size={24} />
-                </motion.a>
+            <nav className="w-full flex items-center px-5 py-2.5 rounded-2xl bg-[rgba(250,248,245,0.92)] backdrop-blur-xl border border-stone-200/80 shadow-lg shadow-stone-300/20">
+              {/* Name — left */}
+              <a
+                href="#hero"
+                onClick={(e) => handleNavClick(e, "#hero")}
+                className="font-serif font-bold text-stone-900 text-[1.05rem] leading-none tracking-tight hover:opacity-75 transition-opacity select-none"
+              >
+                Yash Chavda<span className="ember-text">.</span>
+              </a>
+
+              {/* Spacer */}
+              <div className="flex-1" />
+
+              {/* Links — right */}
+              <div className="flex items-center gap-0.5">
+                {NAV_LINKS.map(({ label, href }) => (
+                  <a
+                    key={href}
+                    href={href}
+                    onClick={(e) => handleNavClick(e, href)}
+                    className="px-4 py-1.5 rounded-full text-[11px] font-mono tracking-[3px] uppercase text-stone-500 hover:text-stone-900 hover:bg-white/80 transition-all duration-200"
+                  >
+                    {label}
+                  </a>
+                ))}
               </div>
-            </div>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+
+      {/* Mobile floating circle button — always visible */}
+      <button
+        type="button"
+        onClick={() => setMenuOpen((prev) => !prev)}
+        style={{ backgroundColor: menuOpen ? "rgba(250,248,245,1)" : "rgba(250,248,245,0.78)" }}
+        className="fixed top-5 right-5 z-[60] md:hidden flex h-9 w-9 items-center justify-center rounded-full border border-stone-200/70 backdrop-blur-md shadow-sm transition-colors duration-200"
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
+      >
+        <div className="flex w-4 flex-col gap-[4.5px]">
+          <span className={`block h-[1.5px] bg-stone-800 transition-all duration-300 ${menuOpen ? "translate-y-[6px] rotate-45" : ""}`} />
+          <span className={`block h-[1.5px] bg-stone-800 transition-all duration-300 ${menuOpen ? "-translate-y-[0px] -rotate-45" : ""}`} />
+        </div>
+      </button>
+
+      {/* Mobile fullscreen overlay */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.28, ease: "easeInOut" }}
+            className="fixed inset-0 z-[55] flex flex-col items-center justify-center bg-cream md:hidden"
+          >
+            <ul className="flex flex-col items-center gap-10">
+              {NAV_LINKS.map(({ label, href }, i) => (
+                <motion.li
+                  key={href}
+                  initial={{ opacity: 0, y: 22 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.3, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <a
+                    href={href}
+                    onClick={(e) => handleNavClick(e, href)}
+                    className="font-serif text-4xl font-bold text-stone-900 hover:text-ember-red transition-colors"
+                  >
+                    {label}
+                  </a>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
