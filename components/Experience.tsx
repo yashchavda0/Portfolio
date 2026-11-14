@@ -8,17 +8,15 @@ import { FiChevronDown } from "react-icons/fi";
 
 const experiences = [
   {
-    title: "Trainee Software Engineer",
-    company: "Silver Touch Technologies Ltd.",
-    location: "Ahmedabad",
-    period: "2024 – Present",
-    description: "Building production AI systems with cutting-edge tech stack.",
-    metrics: [
-      { label: "Tabular Accuracy", value: 99, suffix: "%", emoji: "🎯" },
-      { label: "SQL Dependency Cut", value: 70, suffix: "%", emoji: "🧠" },
-      { label: "Config Effort Reduced", value: 50, suffix: "%", emoji: "⚙️" },
-      { label: "Vector Retrieval Boost", value: 40, suffix: "%", emoji: "⚡" },
-      { label: "System Uptime", value: 99, suffix: "%+", emoji: "🚀" },
+    title: 'AI/ML Engineer',
+    company: 'Silver Touch Technologies Ltd.',
+    location: 'Ahmedabad',
+    period: 'Present',
+    description: 'Building B2B solutions with cutting-edge tech stack.',
+    highlights: [
+      { text: 'Tabular Accuracy', value: '99%', icon: 'target' },
+      { text: 'Query Performance', value: '+40%', icon: 'zap' },
+      { text: 'Core Optimization', value: '15-20%', icon: 'trending-up' },
     ],
     achievements: [
       "Engineered LLM-driven multi-agent orchestration system with dynamic task routing — reduced incorrect tool usage by 40%",
