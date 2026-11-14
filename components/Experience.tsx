@@ -8,7 +8,7 @@ import { SiNextdotjs, SiPostgresql, SiGraphql, SiFastapi } from 'react-icons/si'
 
 const experiences = [
   {
-    title: 'Trainee Software Engineer',
+    title: 'AI/ML Engineer',
     company: 'Silver Touch Technologies Ltd.',
     location: 'Ahmedabad',
     period: 'Present',
