@@ -38,7 +38,7 @@ const COMMANDS: Record<string, string | string[]> = {
     "4. Document Processing — OCR/NLP pipeline (Python, FastAPI)",
   ],
   experience: [
-    "Silver Touch Technologies — Software Engineer (2024–Present)",
+    "Silver Touch Technologies — AI/ML Engineer (July 2025–Present)",
     "  • LLM multi-agent orchestration — 40% fewer routing errors",
     "  • NL→SQL via RAG — 70% SQL dependency cut, sub-2s latency",
     "  • Workflow automation engine — 50% config effort reduction",

@@ -15,7 +15,7 @@ const COMMANDS: Record<string, string> = {
   projects:
     "LLM Orchestration · Imaginify · Visionary Vest · Document Processing",
   experience:
-    "Trainee Software Engineer @ Silver Touch Technologies (2024–Present)",
+    "AI/ML Engineer @ Silver Touch Technologies (July 2025–Present)",
   resume: "Download: /resume.pdf",
   contact: "Email: yashchavda@email.com | GitHub: @yashchavda0",
   joke: "Why do programmers prefer dark mode? Because light attracts bugs.",

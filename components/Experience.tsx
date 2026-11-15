@@ -8,10 +8,10 @@ import { FiChevronDown } from "react-icons/fi";
 
 const experiences = [
   {
-    title: "Trainee Software Engineer",
+    title: "AI/ML Engineer",
     company: "Silver Touch Technologies Ltd.",
     location: "Ahmedabad",
-    period: "2024 – Present",
+    period: "2025 – Present",
     description: "Building production AI systems with cutting-edge tech stack.",
     metrics: [
       { label: "Tabular Accuracy", value: 99, suffix: "%", emoji: "🎯" },

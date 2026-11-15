@@ -43,12 +43,11 @@ export default function Navigation() {
         {scrolled && (
           <motion.div
             key="pill-nav"
-            initial={{ opacity: 0, y: -18, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -18, scale: 0.96 }}
+            initial={{ opacity: 0, x: "-50%", y: -18, scale: 0.96 }}
+            animate={{ opacity: 1, x: "-50%", y: 0, scale: 1 }}
+            exit={{ opacity: 0, x: "-50%", y: -18, scale: 0.96 }}
             transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden md:flex"
-            style={{ width: "680px" }}
+            className="fixed top-5 left-1/2 z-50 hidden w-[min(680px,calc(100vw-2rem))] md:flex"
           >
             <nav className="w-full flex items-center px-5 py-2.5 rounded-2xl bg-[rgba(250,248,245,0.92)] backdrop-blur-xl border border-stone-200/80 shadow-lg shadow-stone-300/20">
               {/* Name — left */}

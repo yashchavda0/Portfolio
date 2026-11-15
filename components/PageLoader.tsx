@@ -85,7 +85,7 @@ export default function PageLoader() {
             transition={{ delay: 0.9, duration: 0.4 }}
             className="mt-3 font-mono text-[9px] tracking-[5px] uppercase text-stone-400"
           >
-            AI Engineer
+            AI/ML Engineer
           </motion.span>
         </motion.div>
       )}

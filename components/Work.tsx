@@ -482,10 +482,10 @@ export default function Work() {
               badge="Current Role"
               badgeColor="#dc2626"
               period="2025 — Present"
-              role="Trainee Software Engineer"
+              role="AI/ML Engineer"
               company="Silver Touch Technologies Ltd."
               location="Ahmedabad, India"
-              description="Building enterprise-grade AI systems and scalable backend architectures. Delivered solutions for 3 enterprise clients — including a classified deployment with complete air-gapped network isolation — across government, defense, and commercial sectors."
+              description="Building enterprise-grade AI systems and scalable backend architectures. Delivered solutions for 5 enterprise clients — including a classified deployment with complete air-gapped network isolation — across government, defense, and commercial sectors."
               metrics={currentRoleMetrics}
               achievements={currentRoleAchievements}
               tech={currentRoleTech}

@@ -79,7 +79,7 @@ export default function Hero() {
           className="flex items-center gap-4 mb-8 md:mb-10"
         >
           <span className="font-mono text-[10px] tracking-[4px] uppercase text-stone-400">
-            AI Engineer
+            AI/ML Engineer
           </span>
         </motion.div>
 
